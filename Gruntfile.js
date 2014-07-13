@@ -19,6 +19,10 @@ module.exports = function(grunt) {
         development: {
             options: {
               compress: true,  //minifying the result
+              optimization: 2,
+              sourceMap: true,
+              sourceMapFilename: "./app/assets/global.css.map",
+              sourceMapBasepath: "./app/assets/"
             },
             files: {
               //compiling global.less into global.css
@@ -36,6 +40,7 @@ module.exports = function(grunt) {
           './bower_components/jquery/dist/jquery.js',
           './bower_components/bootstrap/dist/js/bootstrap.js',
           './app/assets/js/vendor/*.js',
+          './app/assets/js/partials/*.js',
           './app/assets/js/global.js'
         ],
         dest: './public/assets/js/global.js',
@@ -66,7 +71,7 @@ module.exports = function(grunt) {
             //watched files
             './bower_components/jquery/jquery.js',
             './bower_components/bootstrap/dist/js/bootstrap.js',
-            './app/assets/js/global.js'
+            './app/assets/js/**/*.js'
             ],
           tasks: ['concat:js_global','uglify:global'],     //tasks to run
           options: {
@@ -74,7 +79,7 @@ module.exports = function(grunt) {
           }
         },
         less: {
-          files: ['./app/assets/css/*.less'],  //watched files
+          files: ['./app/assets/css/**/*.less'],  //watched files
           tasks: ['less'],                          //tasks to run
           options: {
             livereload: true                        //reloads the browser
