@@ -1,0 +1,95 @@
+/*==========  Transactions  ==========*/
+.credit {
+  color: @brand-danger;
+  font-weight: bold;
+}
+
+.debit {
+  color: @brand-success;
+  font-weight: bold;
+}
+
+
+// Transaction Select Arrow
+.select-arrow {
+  background: #ECECEC;
+
+  .gradient(#EFEFEF, #DFDFDF);
+
+  border: 1px solid #AAA;
+  box-shadow: 0 0 1px #AAA;
+  display: inline-block;
+  padding: 0 5px;
+  .border-radius(2px);
+
+  &:hover,
+  &:focus {
+    .gradient(#DFDFDF, #EFEFEF);
+  }
+
+  &:active {
+    background: #DFDFDF;
+  }
+
+  .caret {
+      color: #5C5C5C;
+      margin-left: 0;
+      border-width: 5px;
+  }
+}
+
+
+// Transaction Table
+.transaction-table {
+    > tbody > tr > td {
+        vertical-align: middle;
+    }
+    tbody > tr:hover {
+        background-color: @table-bg-hover;
+    }
+}
+
+.transaction-row.editing {
+    &,
+    &:hover {
+        background-color: @state-warning-bg;
+    }
+    > td {
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
+}
+
+.transaction-payee {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+
+.split-transaction-row {
+    & > td {
+        padding: 12px 24px !important;
+    }
+}
+
+.inplace_field {
+    margin-bottom: 0;
+}
+
+
+// Actions
+.js-transaction-row {
+    input {
+        display: none;
+    }
+}
+.js-transaction-row.editing {
+    input {
+        display:block;
+    }
+    .js-transaction-value {
+        display: none;
+    }
+}

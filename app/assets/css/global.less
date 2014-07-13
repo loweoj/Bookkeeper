@@ -1,26 +1,76 @@
 /*==========  Bootstrap  ==========*/
-@import 'base.less';
+@import 'bootstrap.less';
+
+
+/*==========  Plugins  ==========*/
+@import "vendor/datatables/jquery.datatables.less";
+
 
 /*==========  Global  ==========*/
 html{
 	height: 100%;
 }
+
 body {
 	font-weight: 300;
 	height: 100%;
 }
 
 
+/*==========  Global Overrides  ==========*/
+@import "partials/tables";
+
+
+/*==========  Site  ==========*/
+.site-header {
+    background: @blue-light;
+    padding-top: 15px;
+}
+
+.site-logo {
+  color: #fff;
+}
+
+.site-nav {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    > li {
+        float: left;
+        position: relative;
+        > a {
+            background-color: #7ABCDE;
+            border-radius: 0;
+            color: #fff;
+            display: block;
+            font-weight: bold;
+            margin-right: 4px;
+            padding: 8px 12px;
+            &:hover,
+            &:focus,
+            &.active {
+                background-color: lighten(#7ABCDE, 10%);
+                text-decoration: none;
+            }
+            &.active {
+                background-color: #fff;
+                color: @blue-light;
+            }
+        }
+    }
+}
+
+
 /*==========  Sign In  ==========*/
 .form-signin {
-  max-width: 330px;
-  padding: 15px;
-  margin: 0 auto;
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
 }
 
 .form-signin .form-signin-heading,
 .form-signin .checkbox {
-  margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 .form-control {
@@ -28,17 +78,17 @@ body {
 }
 
 .form-signin .checkbox {
-  font-weight: normal;
+    font-weight: normal;
 }
 
 .form-signin .form-control {
-  position: relative;
-  height: auto;
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-          box-sizing: border-box;
-  padding: 10px;
-  font-size: 16px;
+    position: relative;
+    height: auto;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 10px;
+    font-size: 16px;
 }
 
 .form-signin .form-control:focus {
@@ -52,46 +102,10 @@ body {
 }
 
 .form-signin input[type="password"] {
-  margin-bottom: 10px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
 }
 
-
-/*==========  Transactions  ==========*/
-.credit {
-  color: @brand-danger;
-  font-weight: bold;
-}
-
-.debit {
-  color: @brand-success;
-  font-weight: bold;
-}
-
-.select-arrow {
-  background: #ECECEC;
-
-  .gradient(#EFEFEF, #DFDFDF);
-
-  border: 1px solid #AAA;
-  box-shadow: 0 0 1px #AAA;
-  display: inline-block;
-  padding: 0 5px;
-  .border-radius(2px);
-
-  &:hover,
-  &:focus {
-    .gradient(#DFDFDF, #EFEFEF);
-  }
-
-  &:active {
-    background: #DFDFDF;
-  }
-
-  .caret {
-      color: #5C5C5C;
-      margin-left: 0;
-      border-width: 5px;
-  }
-}
+/*==========  Modules  ==========*/
+@import "partials/transactions.less";
