@@ -25,9 +25,15 @@ Books.UI.Transactions = function()
         startEditingRow: function()
         {
             $cell = $(this);
-            $row = $(this).parent('tr');
+            $row = $cell.parent('tr');
+
+            // Don't overwrite values if already editing!
+            if( $row.hasClass('editing') ) return;
+
+            // Set editing mode
             $row.addClass('editing');
 
+            // Find cells
             $cells = $row.find('td');
 
             // Fill all the inputs with the current values.
