@@ -20,6 +20,10 @@ Books.UI.Transactions = function()
         {
             // Bind cell editing to the transaction table
             $( tableSelector ).on('click', rowSelector + ' > td:not([data-no-edit])', EditTransactions.startEditingRow);
+
+            $( '.datepicker' ).datepicker({
+                format: 'dd/mm/yyyy'
+            });
         },
 
         startEditingRow: function()
@@ -48,7 +52,7 @@ Books.UI.Transactions = function()
                 currentValue = cell.find( cellValueSelector ).html();
 
                 // Fill the input with the value.
-                input.val(currentValue);
+                input.val(currentValue).change();
             });
 
             // Focus on the input clicked.
@@ -89,9 +93,9 @@ Books.UI.Transactions = function()
         {
             // Table row currently being edited
             var row = $( rowSelector + '.editing' );
-
             if (!row.is(e.target) // if the target of the click isn't the row...
-                && row.has(e.target).length === 0) // ... nor a descendant of the row
+                && row.has(e.target).length === 0 // ... nor a descendant of the row
+                && $(e.target).parents('.datepicker').length == 0) // and is not part of a datepicker
             {
                 EditTransactions.stopEditingRow();
             }
