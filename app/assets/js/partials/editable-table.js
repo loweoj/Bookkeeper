@@ -1,26 +1,27 @@
-if (typeof(Books) == 'undefined') {
-    Books      = {};
-    Books.UI   = {};
+if (typeof(BookKeeper) == 'undefined') {
+    BookKeeper      = {};
+    BookKeeper.UI   = {};
 }
 
-Books.UI.Transactions = function()
+BookKeeper.UI.EditableTable = function()
 {
-    var tableSelector = '.js-transaction-table';
-    var rowSelector = '.js-transaction-row';
-    var cellValueSelector = '.js-transaction-value';
+    var tableSelector = '.js-editable-table';
+    var rowSelector = '.js-editable-row';
+    var cellValueSelector = '.js-editable-value';
 
     var init    = function() {
         // $('.js-transaction-table').DataTable();
-        EditTransactions.init();
+        EditableTable.init();
     };
 
-    var EditTransactions = {
+    var EditableTable = {
 
         init: function()
         {
             // Bind cell editing to the transaction table
-            $( tableSelector ).on('click', rowSelector + ' > td:not([data-no-edit])', EditTransactions.startEditingRow);
+            $( tableSelector ).on('click', rowSelector + ' > td:not([data-no-edit])', EditableTable.startEditingRow);
 
+            // Bind the date picker
             $( '.datepicker' ).datepicker({
                 format: 'dd/mm/yyyy'
             });
@@ -37,13 +38,18 @@ Books.UI.Transactions = function()
             // Set editing mode
             $row.addClass('editing');
 
+            // We don't need to change the values of inputs.
+            // They are populated by the server, and stay
+            // updated as they are edited by the user.
+
+            /*
             // Find cells
             $cells = $row.find('td');
 
             // Fill all the inputs with the current values.
             $cells.each(function(){
                 cell = $(this);
-                input = cell.find('input');
+                input = cell.find('[data-editable-input]');
 
                 // If no input then get out.
                 if( input.length == 0 ) return;
@@ -52,14 +58,15 @@ Books.UI.Transactions = function()
                 currentValue = cell.find( cellValueSelector ).html();
 
                 // Fill the input with the value.
-                input.val(currentValue).change();
+                input.val(currentValue);
             });
 
             // Focus on the input clicked.
-            $cell.find('input').focus().select();
+            $cell.find('[data-editable-input]').focus().select();
+            */
 
             // Start listening for an outside click.
-            $(document).on('mouseup.endEditingTransaction', EditTransactions.checkShouldEndEditing);
+            $(document).on('mouseup.stopEditingTable', EditableTable.checkShouldEndEditing);
         },
 
         stopEditingRow: function()
@@ -70,13 +77,13 @@ Books.UI.Transactions = function()
 
             $cells.each(function(){
                 cell = $(this);
-                input = cell.find('input');
+                input = cell.find('[data-editable-input]');
 
                 // If no input then get out.
                 if( input.length == 0 ) return;
 
                 // Find the value of the field
-                currentValue = input.val();
+                currentValue = EditableTable._getTagText(input);
 
                 // Fill the cell with the current value.
                 cell.find( cellValueSelector ).html(currentValue);
@@ -86,7 +93,7 @@ Books.UI.Transactions = function()
             $row.removeClass('editing');
 
             // Stop listening for outside click
-            $(document).off('mouseup.endEditingTransaction');
+            $(document).off('mouseup.stopEditingTable');
         },
 
         checkShouldEndEditing: function(e)
@@ -97,9 +104,17 @@ Books.UI.Transactions = function()
                 && row.has(e.target).length === 0 // ... nor a descendant of the row
                 && $(e.target).parents('.datepicker').length == 0) // and is not part of a datepicker
             {
-                EditTransactions.stopEditingRow();
+                EditableTable.stopEditingRow();
             }
         },
+
+        _getTagText: function( $input )
+        {
+            var tagName = $input.prop('tagName');
+            if( tagName == 'INPUT' ) return $input.val();
+            if( tagName == 'SELECT' ) return $input.find(":selected").text();
+            return false;
+        }
     };
 
     return {
@@ -110,6 +125,6 @@ Books.UI.Transactions = function()
 
 if (typeof(jQuery)!='undefined') {
     jQuery(function($) {
-        Books.UI.Transactions.init();
+        BookKeeper.UI.EditableTable.init();
     });
 }

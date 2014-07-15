@@ -21,8 +21,8 @@ module.exports = function(grunt) {
               compress: true,  //minifying the result
               optimization: 2,
               sourceMap: true,
-              sourceMapFilename: "./app/assets/global.css.map",
-              sourceMapBasepath: "./app/assets/"
+              sourceMapFilename: "./public/assets/css/global.css.map",
+              sourceMapBasepath: "./public/assets/css/"
             },
             files: {
               //compiling global.less into global.css

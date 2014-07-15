@@ -1,0 +1,45 @@
+/*==========  Editable Table Module  ==========*/
+/**
+ * Allows in-place editing of fields in the table.
+ *
+ */
+
+.editable-table {
+    > tbody > tr > td {
+        vertical-align: middle;
+    }
+    tbody > tr:hover {
+        background-color: @table-bg-hover;
+    }
+}
+
+.editable-row.editing {
+    &,
+    &:hover {
+        background-color: @state-warning-bg;
+    }
+    > td {
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
+}
+
+.editable-row .form-control {
+    margin-bottom: 0;
+}
+
+
+// Actions
+.js-editable-row {
+    .form-control {
+        display: none;
+    }
+}
+.js-editable-row.editing {
+    .form-control {
+        display:block;
+    }
+    .js-editable-value {
+        display: none;
+    }
+}

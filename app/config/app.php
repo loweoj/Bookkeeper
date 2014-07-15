@@ -121,7 +121,11 @@ return array(
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
-
+        'Way\Generators\GeneratorsServiceProvider',
+        'Laracasts\Commander\CommanderServiceProvider',
+        'McCool\LaravelAutoPresenter\LaravelAutoPresenterServiceProvider',
+        'Barryvdh\Debugbar\ServiceProvider',
+        'Rtablada\PackageInstaller\PackageInstallerServiceProvider'
 	),
 
 	/*

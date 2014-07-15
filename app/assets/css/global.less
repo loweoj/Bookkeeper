@@ -5,29 +5,39 @@
 /*==========  Plugins  ==========*/
 @import "vendor/datatables/jquery.datatables.less";
 @import "vendor/bootstrap-datepicker.less";
+@import "vendor/dropzone.less";
+
+
+
+/*==========  Modules  ==========*/
+@import "partials/editable-table.less";
+@import "partials/transactions.less";
 
 
 /*==========  Global  ==========*/
 html{
-	height: 100%;
+    height: 100%;
 }
 
 body {
-	font-weight: 300;
-	height: 100%;
+    font-weight: 300;
+    height: 100%;
 }
 
+.align-right {
+  text-align: right;
+}
 
-/*==========  Global Overrides  ==========*/
+/*==========  Base Overrides  ==========*/
 @import "partials/tables";
 @import "partials/forms";
-
 
 
 /*==========  Site  ==========*/
 .site-header {
     background: @blue-light;
     padding-top: 15px;
+    margin-bottom: 25px;
 }
 
 .site-logo {
@@ -60,9 +70,17 @@ body {
                 color: @blue-light;
             }
         }
+
+      &.last {
+          float: right;
+      }
     }
 }
 
+
+.util-bar {
+    margin: 15px 0 25px 0;
+}
 
 /*==========  Sign In  ==========*/
 .form-signin {
@@ -109,6 +127,3 @@ body {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
-
-/*==========  Modules  ==========*/
-@import "partials/transactions.less";

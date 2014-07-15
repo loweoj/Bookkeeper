@@ -1,0 +1,1 @@
+/home/vagrant/accounts/app/views/records/show.blade.php
