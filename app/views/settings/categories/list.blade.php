@@ -7,48 +7,52 @@
 
     <div class="util-bar">
         <div class="align-right">
-            <a class="dropdown-toggle  btn  btn-primary" data-toggle="modal" data-target="#createNewCategory" href="#">Add New</a>
+            <a class="dropdown-toggle  btn  btn-primary" data-toggle="modal" data-target="#createCategoryModal" href="#">Add New</a>
         </div>
 
-        <div class="modal fade" id="createNewCategory" tabindex="-1" role="dialog" aria-labelledby="Import Statement">
+        <div class="modal  fade  js-ajax-modal" id="createCategoryModal" tabindex="-1" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    {{ Form::open(['url' => 'settings/categories', 'class' => 'form-horizontal  js-ajax-form  js-category-form']) }}
+                    {{ Form::open(['route' => 'categories.create', 'class' => 'form-horizontal  js-ajax-form-createCategory']) }}
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                         <h4 class="modal-title">Create New Category</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group @if($errors->has('type')) has-error @endif">
-                            {{ Form::label('type', 'Type', ['class'=>'col-sm-2  control-label']) }}
-                            <div class="col-sm-5">{{ Form::select('type', ['income' => 'Income', 'expense' => 'Expense'], 'Income', ['class' => 'form-control']) }}</div>
-                            {{ $errors->first('type', '<span class="help-block  col-sm-offset-2  col-sm-10">:message</span>') }}
-                        </div>
+                        <div class="modal-body">
+                            <div class="form-group @if($errors->has('type')) has-error @endif">
+                                {{ Form::label('type', 'Type', ['class'=>'col-sm-2  control-label']) }}
+                                <div class="col-sm-5">{{ Form::select('type', ['income' => 'Income', 'expense' => 'Expense'], 'Income', ['class' => 'form-control']) }}</div>
+                                {{ $errors->first('type', '<span class="help-block  col-sm-offset-2  col-sm-10">:message</span>') }}
+                            </div>
 
-                        <div class="form-group @if($errors->has('code')) has-error @endif">
-                            {{ Form::label('code', 'Code', ['class'=>'col-sm-2  control-label']) }}
-                            <div class="col-sm-10">{{ Form::text('code', $nextCode, ['class'=>'form-control']) }}</div>
-                            {{ $errors->first('code', '<span class="help-block  col-sm-offset-2  col-sm-10">:message</span>') }}
-                        </div>
-                        <div class="form-group @if($errors->has('name')) has-error @endif">
-                            {{ Form::label('name', 'Name', ['class'=>'col-sm-2  control-label']) }}
-                            <div class="col-sm-10">{{ Form::text('name', '', ['class'=>'form-control']) }}</div>
-                            {{ $errors->first('name', '<span class="help-block  col-sm-offset-2  col-sm-10">:message</span>') }}
-                        </div>
-                        <div class="form-group @if($errors->has('description')) has-error @endif">
-                            {{ Form::label('description', 'Description', ['class'=>'col-sm-2  control-label']) }}
-                            <div class="col-sm-10">{{ Form::text('description', '', ['class'=>'form-control']) }}</div>
-                            {{ $errors->first('description', '<span class="help-block  col-sm-offset-2  col-sm-10">:message</span>') }}
+                            <div class="form-group @if($errors->has('code')) has-error @endif">
+                                {{ Form::label('code', 'Code', ['class'=>'col-sm-2  control-label']) }}
+                                <div class="col-sm-10">{{ Form::text('code', $nextCode, ['class'=>'form-control', 'data-next-code']) }}</div>
+                                {{ $errors->first('code', '<span class="help-block  col-sm-offset-2  col-sm-10">:message</span>') }}
+                            </div>
+                            <div class="form-group @if($errors->has('name')) has-error @endif">
+                                {{ Form::label('name', 'Name', ['class'=>'col-sm-2  control-label']) }}
+                                <div class="col-sm-10">{{ Form::text('name', null, ['class'=>'form-control']) }}</div>
+                                {{ $errors->first('name', '<span class="help-block  col-sm-offset-2  col-sm-10">:message</span>') }}
+                            </div>
+                            <div class="form-group @if($errors->has('description')) has-error @endif">
+                                {{ Form::label('description', 'Description', ['class'=>'col-sm-2  control-label']) }}
+                                <div class="col-sm-10">{{ Form::textarea('description', null, ['class'=>'form-control', "rows"=>4]) }}</div>
+                                {{ $errors->first('description', '<span class="help-block  col-sm-offset-2  col-sm-10">:message</span>') }}
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        {{ Form::submit('Add Category', ['class'=>'btn  btn-success']) }}
+                        {{ Form::hidden('editId', '') }}
+                        {{ Form::input('submit', 'create-one', 'Create Category', ['class'=>'btn  btn-primary']) }}
+                        {{ Form::input('submit', 'create-many', 'Create and Add Another', ['class'=>'btn  btn-primary']) }}
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                     {{ Form::close() }}
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
+                </div>
+            </div>
+        </div>
     </div>
 
     @if( Session::has('success') )
@@ -61,77 +65,89 @@
     <table class="table  table-grid  js-categories-table">
         <thead>
         <tr>
-            <th colspan="4">Code</th>
-            <th colspan="6">Name</th>
-            <th colspan="6">Description</th>
-            <th colspan="2">Type</th>
-            <th colspan="4">&nbsp;</th> <!-- utils -->
+            <th colspan="2">Code</th>
+            <th colspan="5">Name</th>
+            <th colspan="12">Description</th>
+            <th colspan="2" class="align-right">Type</th>
+            <th colspan="3">&nbsp;</th> <!-- utils -->
         </tr>
         </thead>
         <tbody>
         @if(count($categories) > 0)
         @foreach($categories as $category)
-        <tr>
 
-            <td colspan="4">
-                {{ $category->code }}
-            </td>
+            @include('settings.categories.singleRow', array('category' => $category, 'this' => 'that'))
 
-            <td colspan="6">
-                {{ $category->name }}
-            </td>
-
-            <td colspan="6">
-                {{ $category->description }}
-            </td>
-
-            <td colspan="2">
-                {{ $category->type }}
-            </td>
-
-            <td colspan="4" class="transaction-utils">
-                <a href="{{ URL::action('CategoriesController@edit', ['id' => $category->id]) }}" class="btn  btn--transaction">Edit</a>
-                <a href="#" class="btn  btn--transaction  js-delete"><i class="glyphicon-remove"></i></a>
-            </td>
-        </tr>
         @endforeach
         @endif
         </tbody>
     </table>
 </div>
 
-
-<div class="modal fade" id="editCategory" tabindex="-1" role="dialog" aria-labelledby="Edit Category">
+{{-- Include Delete Form --}}
+<div class="modal fade hiden" id="deleteModal" tabindex="-1" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
-            {{ Form::open(['url' => 'settings/categories', 'class' => 'form-horizontal  js-category-form']) }}
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title">Edit <%category.name%></h4>
+                <h4 class="modal-title">Confirm Delete</h4>
             </div>
             <div class="modal-body">
-                <div class="form-group @if($errors->has('code')) has-error @endif">
-                    {{ Form::label('code', 'Code', ['class'=>'col-sm-2  control-label']) }}
-                    <div class="col-sm-10">{{ Form::text('code', '<%category.code%>', ['class'=>'form-control']) }}</div>
-                    {{ $errors->first('code', '<span class="help-block  col-sm-offset-2  col-sm-10">:message</span>') }}
-                </div>
-                <div class="form-group @if($errors->has('name')) has-error @endif">
-                    {{ Form::label('name', 'Name', ['class'=>'col-sm-2  control-label']) }}
-                    <div class="col-sm-10">{{ Form::text('name', '<%category.name%>', ['class'=>'form-control']) }}</div>
-                    {{ $errors->first('name', '<span class="help-block  col-sm-offset-2  col-sm-10">:message</span>') }}
-                </div>
-                <div class="form-group @if($errors->has('description')) has-error @endif">
-                    {{ Form::label('description', 'Description', ['class'=>'col-sm-2  control-label']) }}
-                    <div class="col-sm-10">{{ Form::text('description', '<%category.description%>', ['class'=>'form-control']) }}</div>
-                    {{ $errors->first('description', '<span class="help-block  col-sm-offset-2  col-sm-10">:message</span>') }}
-                </div>
+                <p>Are you sure you want to delete <strong>"<span data-category-name></span>"</strong>?</p>
             </div>
             <div class="modal-footer">
-                {{ Form::submit('Edit Category', ['class'=>'btn  btn-success']) }}
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                {{ Form::open(['route' => ['categories.delete', '']]) }}
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                {{ Form::submit('Delete', ['class'=>'btn btn-danger danger']) }}
+                {{ Form::close() }}
             </div>
-            {{ Form::close() }}
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+        </div>
+    </div>
+</div>
+
+
+{{-- Include Edit Form --}}
+<script type="text/js-template" id="editModalTemplate">
+    <div class="modal fade  js-ajax-modal" id="editCategoryModal" tabindex="-1" role="dialog" aria-labelledby="Edit Category">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                {{ Form::rawOpen(['route' => ['categories.update', 'rawOpenPlaceholder'], 'method'=>'post', 'class' => 'form-horizontal  js-ajax-form-editCategory'], '<%= category.id %>') }}
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Edit <%= category.name %></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-body">
+                        <div class="form-group @if($errors->has('type')) has-error @endif">
+                            {{ Form::label('type', 'Type', ['class'=>'col-sm-2  control-label']) }}
+                            <div class="col-sm-5">{{ Form::rawSelect('type', ['income' => 'Income', 'expense' => 'Expense'], '<%= category.type %>', ['class' => 'form-control']) }}</div>
+                            {{ $errors->first('type', '<span class="help-block  col-sm-offset-2  col-sm-10">:message</span>') }}
+                        </div>
+
+                        <div class="form-group @if($errors->has('code')) has-error @endif">
+                            {{ Form::label('code', 'Code', ['class'=>'col-sm-2  control-label']) }}
+                            <div class="col-sm-10">{{ Form::rawInput('text', 'code', '<%= category.code %>', ['class'=>'form-control', 'data-next-code']) }}</div>
+                            {{ $errors->first('code', '<span class="help-block  col-sm-offset-2  col-sm-10">:message</span>') }}
+                        </div>
+                        <div class="form-group @if($errors->has('name')) has-error @endif">
+                            {{ Form::label('name', 'Name', ['class'=>'col-sm-2  control-label']) }}
+                            <div class="col-sm-10">{{ Form::rawInput('text', 'name', '<%= category.name %>', ['class'=>'form-control']) }}</div>
+                            {{ $errors->first('name', '<span class="help-block  col-sm-offset-2  col-sm-10">:message</span>') }}
+                        </div>
+                        <div class="form-group @if($errors->has('description')) has-error @endif">
+                            {{ Form::label('description', 'Description', ['class'=>'col-sm-2  control-label']) }}
+                            <div class="col-sm-10">{{ Form::rawInput('textarea', 'description', '<%= category.description %>', ['class'=>'form-control', "rows"=>4]) }}</div>
+                            {{ $errors->first('description', '<span class="help-block  col-sm-offset-2  col-sm-10">:message</span>') }}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    {{ Form::submit('Edit Category', ['class'=>'btn  btn-success']) }}
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+                {{ Form::close() }}
+            </div>
+        </div>
+    </div>
+</script>
 @stop

@@ -2,6 +2,17 @@
 
 class CategoriesController extends \BaseController {
 
+    public function __construct()
+    {
+        $this->categories = Category::orderBy('code', 'ASC')->get();
+
+        // Allow CORS
+        $this->afterFilter(function ($route, $request, $response) {
+            $response->headers->set('Access-Control-Allow-Origin', '*');
+            return $response;
+        });
+    }
+
 	/**
 	 * Display a listing of the resource.
 	 * GET /categories
@@ -11,11 +22,9 @@ class CategoriesController extends \BaseController {
 	public function index()
 	{
         // Get all categories by code
-        $categories = Category::orderBy('code', 'ASC')->get();
-
-        // Get next available code
-        $nextCode = count($categories) > 0 ? (int) $categories->last()->code + 1 : "001";
-        $nextCode = sprintf("%03d", $nextCode);
+        $categories  = $this->categories;
+        $nextCode = count($categories) > 0 ? (int) $categories->last()->code : "001";
+        $nextCode = sprintf("%03d", $nextCode + 1);
 
 		return View::make('settings.categories.list')
                 ->with(compact('categories', 'nextCode'));
@@ -35,7 +44,34 @@ class CategoriesController extends \BaseController {
         {
             if( Request::ajax() )
             {
-                $renderedView = View::make('settings.categories.newAjaxRow')->with(compact('category'))->render();
+                $renderedView = View::make('settings.categories.singleRow')->with(compact('category'))->render();
+                return Response::json(['success' => true, 'payload' => $renderedView]);
+            }
+
+            Session::flash('success', 'Category created successfully!');
+
+            return Redirect::action('CategoriesController@index');
+        }
+
+        return Redirect::back()->withInput()->withErrors($category->getErrors());
+	}
+
+	/**
+	 * Update the specified resource in storage.
+	 * POST /categories/{id}
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function update($id)
+	{
+        $category = Category::find($id);
+
+        if ($category->update(Input::all()))
+        {
+            if( Request::ajax() )
+            {
+                $renderedView = View::make('settings.categories.singleRow')->with(compact('category'))->render();
                 return Response::json(['success' => true, 'payload' => $renderedView]);
             }
 
@@ -48,45 +84,18 @@ class CategoriesController extends \BaseController {
         return Redirect::back()->withInput()->withErrors($category->getErrors());
 	}
 
-
-	/**
-	 * Show the form for editing the specified resource.
-	 * GET /categories/{id}/edit
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
-	{
-        $category = Category::find($id);
-
-        $view = 'settings.categories.edit';
-
-        return View::make($view)->with(compact('category'));
-	}
-
-	/**
-	 * Update the specified resource in storage.
-	 * PUT /categories/{id}
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
-	{
-		//
-	}
-
 	/**
 	 * Remove the specified resource from storage.
-	 * DELETE /categories/{id}
+	 * POST /categories/delete/{id}
 	 *
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function destroy($id)
+	public function delete($id)
 	{
-		//
+        $category = Category::find($id);
+        $category->delete();
+        return Redirect::back();
 	}
 
 }

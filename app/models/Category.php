@@ -1,8 +1,24 @@
 <?php
 
+use Illuminate\Database\Eloquent\SoftDeletingTrait;
 use McCool\LaravelAutoPresenter\PresenterInterface;
 
 class Category extends BaseModel implements PresenterInterface {
+
+    /**
+     * Enable soft deleting on model
+     */
+    use SoftDeletingTrait;
+
+    /**
+     * @var bool
+     */
+    public $timestamps = true;
+
+    /**
+     * @var string
+     */
+    protected $table = 'categories';
 
     /**
      * @var array
@@ -12,20 +28,38 @@ class Category extends BaseModel implements PresenterInterface {
     /**
      * @var array
      */
-    protected static $rules = [
+    protected $hidden = ['deleted_at'];
+
+    /**
+     * Validation rules when creating
+     *
+     * @var array
+     */
+    protected static $create_rules = [
         'code' => 'required|numeric|unique:categories',
         'name' => 'required',
         'type' => 'required'
     ];
 
-    protected static $messages = [
-        'code.min' => 'The code requires at least 3 digits'
+    /**
+     * Validation rules when updating
+     *
+     * @var array
+     */
+    protected static $update_rules = [
+        'code' => 'required|numeric',
+        'name' => 'required',
+        'type' => 'required'
     ];
 
     /**
-     * @var bool
+     * Validation messages
+     *
+     * @var array
      */
-    public $timestamps = true;
+    protected static $messages = [
+        'code.min' => 'The code requires at least 3 digits'
+    ];
 
     /**
      * Get the presenter class.
@@ -36,5 +70,4 @@ class Category extends BaseModel implements PresenterInterface {
     {
         return '\Bookkeeper\Presenters\CategoryPresenter';
     }
-
 }

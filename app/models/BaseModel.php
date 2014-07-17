@@ -10,11 +10,18 @@ class BaseModel extends Eloquent {
     protected $errors;
 
     /**
-     * Validation rules
+     * Validation rules for model creation
      *
      * @var Array
      */
-    protected static $rules = array();
+    protected static $create_rules = array();
+
+    /**
+     * Validation rules for modeul updating
+     *
+     * @var Array
+     */
+    protected static $update_rules = array();
 
     /**
      * Custom messages
@@ -55,7 +62,10 @@ class BaseModel extends Eloquent {
      */
     public function validate()
     {
-        $v = $this->validator->make($this->attributes, static::$rules, static::$messages);
+        // If the model exists and the update rules are populated, use them.
+        $rules = ($this->exists && !empty(static::$update_rules)) ? static::$update_rules : static::$create_rules;
+
+        $v = $this->validator->make($this->attributes, $rules, static::$messages);
 
         if ($v->passes())
         {

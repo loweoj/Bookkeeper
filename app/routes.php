@@ -32,7 +32,7 @@ Route::post('statements/import', 'StatementsController@import');
 Route::resource('records', 'RecordController');
 
 
-Route::resource('/settings/categories', 'CategoriesController');
+// Route::resource('/settings/categories', 'CategoriesController');
 Route::resource('/settings/streams', 'StreamsController');
 
 /**
@@ -50,3 +50,33 @@ Route::get('expenses', function()
 {
     return View::make('transactions');
 });
+
+
+
+/**
+ * Cribbbs
+ *
+ * The routes to create a Cribbb
+ */
+Route::get('categories', ['uses' => 'CategoriesController@index', 'as' => 'categories.index']);
+Route::post('categories', ['uses' => 'CategoriesController@store', 'as' => 'categories.create']);
+Route::post('categories/edit/{category}', ['uses' => 'CategoriesController@update', 'as' => 'categories.update']);
+Route::post('categories/delete/{category}', ['uses' => 'CategoriesController@delete', 'as' => 'categories.delete']);
+
+    /**
+     * Display a listing of the resource.
+     * GET /categories
+
+     * store new category
+     * POST /categories
+
+     * Show the form for editing the specified resource.
+     * GET /categories/{id}/edit
+
+     * Update the specified resource in storage.
+     * PUT /categories/{id}
+
+     * Remove the specified resource from storage.
+     * DELETE /categories/{id}
+
+     */
