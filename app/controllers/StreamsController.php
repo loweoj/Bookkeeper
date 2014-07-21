@@ -2,85 +2,91 @@
 
 class StreamsController extends \BaseController {
 
-	/**
-	 * Display a listing of the resource.
-	 * GET /streams
-	 *
-	 * @return Response
-	 */
-	public function index()
-	{
-		//
-	}
+    public function __construct()
+    {
+        $this->streams = Stream::all();
+    }
 
-	/**
-	 * Show the form for creating a new resource.
-	 * GET /streams/create
-	 *
-	 * @return Response
-	 */
-	public function create()
-	{
-		//
-	}
+    /**
+     * Display a listing of the resource.
+     * GET /streams
+     *
+     * @return Response
+     */
+    public function index()
+    {
+        $streams  = $this->streams;
 
-	/**
-	 * Store a newly created resource in storage.
-	 * POST /streams
-	 *
-	 * @return Response
-	 */
-	public function store()
-	{
-		//
-	}
+        return View::make('settings.streams.list')
+            ->with(compact('streams'));
+    }
 
-	/**
-	 * Display the specified resource.
-	 * GET /streams/{id}
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
-	{
-		//
-	}
+    /**
+     * Store a newly created resource in storage.
+     * POST /streams
+     *
+     * @return Response
+     */
+    public function store()
+    {
+        $stream = new Stream(Input::all());
 
-	/**
-	 * Show the form for editing the specified resource.
-	 * GET /streams/{id}/edit
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
-	{
-		//
-	}
+        if ($stream->save())
+        {
+            if( Request::ajax() )
+            {
+                $renderedView = View::make('settings.streams.singleRow')->with(compact('stream'))->render();
+                return Response::json(['success' => true, 'payload' => $renderedView]);
+            }
 
-	/**
-	 * Update the specified resource in storage.
-	 * PUT /streams/{id}
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
-	{
-		//
-	}
+            Session::flash('success', 'Stream created successfully!');
 
-	/**
-	 * Remove the specified resource from storage.
-	 * DELETE /streams/{id}
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id)
-	{
-		//
-	}
+            return Redirect::action('CategoriesController@index');
+        }
+
+        return Redirect::back()->withInput()->withErrors($stream->getErrors());
+    }
+
+    /**
+     * Update the specified resource in storage.
+     * POST /streams/{id}
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function update($id)
+    {
+        $stream = Stream::find($id);
+
+        if ($stream->update(Input::all()))
+        {
+            if( Request::ajax() )
+            {
+                $renderedView = View::make('settings.streams.singleRow')->with(compact('stream'))->render();
+                return Response::json(['success' => true, 'payload' => $renderedView]);
+            }
+
+            Session::flash('success', 'Stream created successfully!');
+
+            return Redirect::action('CategoriesController@index');
+
+        }
+
+        return Redirect::back()->withInput()->withErrors($stream->getErrors());
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     * POST /streams/delete/{id}
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function delete($id)
+    {
+        $stream = Stream::find($id);
+        $stream->delete();
+        return Redirect::back();
+    }
 
 }

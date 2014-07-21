@@ -7,10 +7,10 @@ class CategoriesController extends \BaseController {
         $this->categories = Category::orderBy('code', 'ASC')->get();
 
         // Allow CORS
-        $this->afterFilter(function ($route, $request, $response) {
-            $response->headers->set('Access-Control-Allow-Origin', '*');
-            return $response;
-        });
+//        $this->afterFilter(function ($route, $request, $response) {
+//            $response->headers->set('Access-Control-Allow-Origin', '*');
+//            return $response;
+//        });
     }
 
 	/**

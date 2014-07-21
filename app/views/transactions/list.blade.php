@@ -5,6 +5,23 @@
 
     <h1>Transactions</h1>
 
+    @if( count($errors->all()) )
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+
+    @if( isset($status) && $status == 'success' )
+    <div class="alert alert-success">
+        <p>Success!</p>
+    </div>
+    @endif
+
+
     <div class="util-bar">
         <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#importStatementModal"><i class="glyphicon-upload"></i> Import Statement</a>
         <div class="modal fade" id="importStatementModal" tabindex="-1" role="dialog" aria-labelledby="Import Statement">
@@ -24,7 +41,6 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->

@@ -121,8 +121,13 @@ return array(
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
+
+        // Bookkeeper
+        'Bookkeeper\Repo\RepoServiceProvider',
+        'Bookkeeper\Service\Form\FormServiceProvider',
+
+        // Packages
         'Way\Generators\GeneratorsServiceProvider',
-        'Laracasts\Commander\CommanderServiceProvider',
         'McCool\LaravelAutoPresenter\LaravelAutoPresenterServiceProvider',
         'Barryvdh\Debugbar\ServiceProvider',
         'Rtablada\PackageInstaller\PackageInstallerServiceProvider'

@@ -1,21 +1,25 @@
 <?php
 
-use \OfxParser\Parser as OfxParser,
-	\Laracasts\Commander\CommandBus,
-	\Bookkeeper\Statements\ImportStatementCommand;
-
+use Bookkeeper\Commanding\Base\CommandBus;
+use Bookkeeper\Service\Form\ImportStatement\ImportStatementForm;
 
 class StatementsController extends \BaseController {
 
-	private $commandBus;
+    /**
+     * @var CommandBus
+     */
+    // private $commandBus;
 
-	private $ofxParser;
+    /**
+     * @var ImportStatementForm
+     */
+    private $importForm;
 
-	public function __construct(CommandBus $commandBus, OfxParser $ofxParser)
+    public function __construct(ImportStatementForm $importForm )
 	{
-		$this->commandBus = $commandBus;
-		$this->ofxParser = $ofxParser;
-	}
+//		$this->commandBus = $commandBus;
+        $this->importForm = $importForm;
+    }
 
 	/**
 	 * Display a listing of the resource.
@@ -25,73 +29,29 @@ class StatementsController extends \BaseController {
 	 */
 	public function import()
 	{
+//		$file = Input::file('file');
 
-		// $file = Input::file('file');
+        if( $this->importForm->import(Input::all()) )
+        {
+            return Redirect::route('statements.import')->with('status', 'success');
+        }
 
-		// validate file
+        return Redirect::back()
+            ->withInput()
+            ->withErrors( $this->importForm->errors() )
+            ->with('status', 'error');
 
-		// $this->commandBus->execute(
-		// 	new ImportStatementCommand($file)
-		// );
-		// return Redirect::home();
-
-		$file = Input::file('file');
-
-		if( $file->isValid() ) {
-			$directory = base_path('user_uploads/username');
-
-			// Create the filename
-			$filename = basename($file->getClientOriginalName(), '.ofx') . '_' . sha1(time()) . '.' . $file->getClientOriginalExtension();
-
-			// Move the file
-			$uploaded_file = $file->move($directory, $filename);
-
-			if( $uploaded_file ) {
-				// $this->fileParser->parseFile($uploaded_file);
-				// Process OFX
-				// $this->ofxHandler->process($uploaded_file);
-				try {
-
-					$ofx = $this->ofxParser->loadFromFile($uploaded_file);
-
-                    // Create Statement
-                    $newStatement = Statement::create([
-                        'start_date' => $ofx->BankAccount->Statement->startDate,
-                        'end_date' => $ofx->BankAccount->Statement->endDate
-                    ]);
-
-                    // Prepare transactions
-					$insertTransactions = [];
-                    foreach($ofx->BankAccount->Statement->transactions as $transaction) {
-                        $insertTransactions[] = [
-                            'date'      => $transaction->date->format('Y-m-d H:i:s'),
-                            'payee'     => $transaction->payee,
-                            'amount'    => $transaction->amount,
-                            'type'      => $transaction->type,
-                            'statement_id' => $newStatement->id,
-                            'created_at' = new DateTime,
-                            'updated_at' = new DateTime
-                        ];
-					}
-
-                    // Create transactions in one fell swoop!
-                    Transaction::insert($insertTransactions);
-
-					return Response::json('success', 200);
-
-				} catch (Exception $e) {
-					// Could not find the file.
-					print_r($e->getMessage());
-					return Response::json($e->getMessage(), 400);
-				}
-			}
-		}
-		return Response::json('could not upload', 400);
+//		if( $file->isValid() ) {
+//             $this->commandBus->execute(
+//             	new ImportStatementCommand($file)
+//             );
+//             return Redirect::home();
+//		}
+		return Response::json('error', 400);
 	}
 
 	/**
 	 * Return all transactions paged.
-	 * @return [type] [description]
 	 */
 	public function all()
 	{

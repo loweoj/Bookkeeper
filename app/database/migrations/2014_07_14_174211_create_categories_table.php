@@ -17,7 +17,7 @@ class CreateCategoriesTable extends Migration {
 			$table->increments('id');
 			$table->enum('type', ['income','expense']);
             $table->string('name');
-            $table->string('description');
+            $table->string('description')->default('');
 			$table->timestamps();
 		});
 	}

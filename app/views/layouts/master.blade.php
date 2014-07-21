@@ -10,7 +10,7 @@
     <body>
     <header class="site-header">
         <div class="container">
-            <h1 class="site-logo">Books</h1>
+            <h1 class="site-logo">Bookkeeper</h1>
             <ul class="site-nav">
                 <li><a href="/income" class="{{ Request::is( 'income') ? 'active' : '' }}">Income</a></li>
                 <li><a href="/expenses" class="{{ Request::is( 'expenses') ? 'active' : '' }}">Expenses</a></li>
@@ -29,5 +29,6 @@
     @yield('content')
 
     {{ HTML::script('/assets/js/global.js') }}
+
     </body>
 </html>

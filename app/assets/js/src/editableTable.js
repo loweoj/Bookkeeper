@@ -20,11 +20,6 @@ BookKeeper.UI.EditableTable = function()
         {
             // Bind cell editing to the transaction table
             $( tableSelector ).on('click', rowSelector + ' > td:not([data-no-edit])', EditableTable.startEditingRow);
-
-            // Bind the date picker
-            $( '.datepicker' ).datepicker({
-                format: 'dd/mm/yyyy'
-            });
         },
 
         startEditingRow: function()
@@ -92,6 +87,9 @@ BookKeeper.UI.EditableTable = function()
             // Hide all inputs etc.
             $row.removeClass('editing');
 
+            // Save Row.
+            EditableTable.saveRow($row);
+
             // Stop listening for outside click
             $(document).off('mouseup.stopEditingTable');
         },
@@ -106,6 +104,21 @@ BookKeeper.UI.EditableTable = function()
             {
                 EditableTable.stopEditingRow();
             }
+        },
+
+        saveRow: function($row)
+        {
+            data = EditableTable._buildRowData($row);
+            console.log(data);
+        },
+
+        _buildRowData: function($row)
+        {
+            data = {};
+            $row.find('input,select').each(function(){
+                data[this.name] = this.value;
+            });
+            return data;
         },
 
         _getTagText: function( $input )

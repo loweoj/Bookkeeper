@@ -17,7 +17,7 @@ class Statement extends Eloquent {
     /**
      * @var array
      */
-    protected $dates = ['start_Date', 'end_date'];
+    protected $dates = ['start_date', 'end_date'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

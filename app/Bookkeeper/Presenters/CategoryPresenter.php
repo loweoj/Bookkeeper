@@ -19,4 +19,10 @@ class CategoryPresenter extends BasePresenter {
         return ucfirst($this->resource->type);
     }
 
+    public function nameWithCode()
+    {
+        return $this->code . ': ' . $this->name;
+    }
+
+
 } 

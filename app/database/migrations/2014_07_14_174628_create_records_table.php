@@ -18,10 +18,11 @@ class CreateRecordsTable extends Migration {
 			$table->datetime('date');
 			$table->string('payee');
 			$table->string('description');
-			$table->decimal('money_in');
-			$table->decimal('money_out');
-            $table->integer('transaction_id')->unsigned();
+			$table->decimal('money_in')->nullable();
+			$table->decimal('money_out')->nullable();
+            $table->integer('transaction_id')->nullable()->unsigned();
             $table->integer('category_id')->unsigned();
+            $table->softDeletes();
             $table->timestamps();
 			$table->foreign('transaction_id')->references('id')->on('transactions');
 			$table->foreign('category_id')->references('id')->on('categories');

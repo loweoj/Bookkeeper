@@ -20,4 +20,9 @@ $(function() {
             $(this).remove();
         });
     }, 3000);
+
+    /*==========  Datepickers  ==========*/
+    $( '.datepicker' ).datepicker({
+        format: 'dd/mm/yyyy'
+    });
 });

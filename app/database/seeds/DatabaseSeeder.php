@@ -11,13 +11,23 @@ class DatabaseSeeder extends Seeder {
 	{
         DB::statement('SET FOREIGN_KEY_CHECKS=0');
 
+        Stream::truncate();
         Category::truncate();
+        Statement::truncate();
+        Transaction::truncate();
+        Record::truncate();
+        Rule::truncate();
 
         DB::statement('SET FOREIGN_KEY_CHECKS=1');
 
 		Eloquent::unguard();
 
+        $this->call('StreamsTableSeeder');
         $this->call('CategoriesTableSeeder');
+        $this->call('RulesTableSeeder');
+        $this->call('StatementsTableSeeder');
+        $this->call('TransactionsTableSeeder');
+        $this->call('RecordsTableSeeder');
 	}
 
 }

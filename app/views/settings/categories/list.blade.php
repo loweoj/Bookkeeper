@@ -62,7 +62,7 @@
         </div>
     @endif
 
-    <table class="table  table-grid  js-categories-table">
+    <table class="table  table-grid  js-modal-table">
         <thead>
         <tr>
             <th colspan="2">Code</th>
@@ -93,7 +93,7 @@
                 <h4 class="modal-title">Confirm Delete</h4>
             </div>
             <div class="modal-body">
-                <p>Are you sure you want to delete <strong>"<span data-category-name></span>"</strong>?</p>
+                <p>Are you sure you want to delete <strong>"<span data-item-name></span>"</strong>?</p>
             </div>
             <div class="modal-footer">
                 {{ Form::open(['route' => ['categories.delete', '']]) }}
@@ -108,35 +108,35 @@
 
 {{-- Include Edit Form --}}
 <script type="text/js-template" id="editModalTemplate">
-    <div class="modal fade  js-ajax-modal" id="editCategoryModal" tabindex="-1" role="dialog" aria-labelledby="Edit Category">
+    <div class="modal fade  js-ajax-modal" id="editModal" tabindex="-1" role="dialog" aria-labelledby="Edit Category">
         <div class="modal-dialog">
             <div class="modal-content">
-                {{ Form::rawOpen(['route' => ['categories.update', 'rawOpenPlaceholder'], 'method'=>'post', 'class' => 'form-horizontal  js-ajax-form-editCategory'], '<%= category.id %>') }}
+                {{ Form::rawOpen(['route' => ['categories.update', 'rawOpenPlaceholder'], 'method'=>'post', 'class' => 'form-horizontal  js-ajax-form-editCategory'], '<%= jsItem.id %>') }}
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title">Edit <%= category.name %></h4>
+                    <h4 class="modal-title">Edit <%= jsItem.name %></h4>
                 </div>
                 <div class="modal-body">
                     <div class="modal-body">
                         <div class="form-group @if($errors->has('type')) has-error @endif">
                             {{ Form::label('type', 'Type', ['class'=>'col-sm-2  control-label']) }}
-                            <div class="col-sm-5">{{ Form::rawSelect('type', ['income' => 'Income', 'expense' => 'Expense'], '<%= category.type %>', ['class' => 'form-control']) }}</div>
+                            <div class="col-sm-5">{{ Form::rawSelect('type', ['income' => 'Income', 'expense' => 'Expense'], '<%= jsItem.type %>', ['class' => 'form-control']) }}</div>
                             {{ $errors->first('type', '<span class="help-block  col-sm-offset-2  col-sm-10">:message</span>') }}
                         </div>
 
                         <div class="form-group @if($errors->has('code')) has-error @endif">
                             {{ Form::label('code', 'Code', ['class'=>'col-sm-2  control-label']) }}
-                            <div class="col-sm-10">{{ Form::rawInput('text', 'code', '<%= category.code %>', ['class'=>'form-control', 'data-next-code']) }}</div>
+                            <div class="col-sm-10">{{ Form::rawInput('text', 'code', '<%= jsItem.code %>', ['class'=>'form-control', 'data-next-code']) }}</div>
                             {{ $errors->first('code', '<span class="help-block  col-sm-offset-2  col-sm-10">:message</span>') }}
                         </div>
                         <div class="form-group @if($errors->has('name')) has-error @endif">
                             {{ Form::label('name', 'Name', ['class'=>'col-sm-2  control-label']) }}
-                            <div class="col-sm-10">{{ Form::rawInput('text', 'name', '<%= category.name %>', ['class'=>'form-control']) }}</div>
+                            <div class="col-sm-10">{{ Form::rawInput('text', 'name', '<%= jsItem.name %>', ['class'=>'form-control']) }}</div>
                             {{ $errors->first('name', '<span class="help-block  col-sm-offset-2  col-sm-10">:message</span>') }}
                         </div>
                         <div class="form-group @if($errors->has('description')) has-error @endif">
                             {{ Form::label('description', 'Description', ['class'=>'col-sm-2  control-label']) }}
-                            <div class="col-sm-10">{{ Form::rawInput('textarea', 'description', '<%= category.description %>', ['class'=>'form-control', "rows"=>4]) }}</div>
+                            <div class="col-sm-10">{{ Form::rawInput('textarea', 'description', '<%= jsItem.description %>', ['class'=>'form-control', "rows"=>4]) }}</div>
                             {{ $errors->first('description', '<span class="help-block  col-sm-offset-2  col-sm-10">:message</span>') }}
                         </div>
                     </div>

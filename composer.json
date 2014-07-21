@@ -7,7 +7,6 @@
 	"require": {
 		"laravel/framework": "4.2.*",
 		"asgrim/ofxparser": "dev-master",
-		"laracasts/commander": "~1.0",
         "mccool/laravel-auto-presenter": "2.*",
 		"rtablada/package-installer": "dev-master",
 		"barryvdh/laravel-debugbar": "1.*"

@@ -61,6 +61,16 @@ class Category extends BaseModel implements PresenterInterface {
         'code.min' => 'The code requires at least 3 digits'
     ];
 
+    public function records()
+    {
+        return $this->hasMany('Record');
+    }
+
+    public function getNameWithCodeAttribute()
+    {
+        return $this->code . ': ' . $this->name;
+    }
+
     /**
      * Get the presenter class.
      *

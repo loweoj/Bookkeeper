@@ -2,7 +2,7 @@
 
 use McCool\LaravelAutoPresenter\PresenterInterface;
 
-class Transaction extends Eloquent implements PresenterInterface{
+class Transaction extends Eloquent implements PresenterInterface {
 
     /**
      * The database table used by the model.
@@ -22,6 +22,13 @@ class Transaction extends Eloquent implements PresenterInterface{
     protected $dates = ['date'];
 
     /**
+     * Enable soft deleteing on this model
+     *
+     * @var bool
+     */
+    protected $softDelete = true;
+
+    /**
      * @var array
      */
     protected $appends = ['amount_type'];
@@ -30,6 +37,7 @@ class Transaction extends Eloquent implements PresenterInterface{
     {
         parent::boot();
 
+        /*
         static::creating(function($post)
         {
             $post->created_by = Auth::user()->id;
@@ -40,6 +48,7 @@ class Transaction extends Eloquent implements PresenterInterface{
         {
             $post->updated_by = Auth::user()->id;
         });
+        */
     }
 
     /**

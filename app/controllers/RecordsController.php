@@ -1,28 +1,53 @@
 <?php
 
+use Bookkeeper\Repo\Category\CategoryInterface;
+use Bookkeeper\Repo\Record\RecordInterface;
+use Bookkeeper\Repo\Stream\StreamInterface;
+
 class RecordsController extends \BaseController {
 
-	/**
-	 * Display a listing of the resource.
-	 * GET /records
-	 *
-	 * @return Response
-	 */
-	public function index()
-	{
-		//
-	}
+    /**
+     * @var RecordInterface
+     */
+    private $record;
 
-	/**
-	 * Show the form for creating a new resource.
-	 * GET /records/create
-	 *
-	 * @return Response
-	 */
-	public function create()
-	{
-		//
-	}
+    /**
+     * @var CategoryInterface
+     */
+    private $category;
+    /**
+     * @var StreamInterface
+     */
+    private $stream;
+
+    public function __construct(RecordInterface $record, CategoryInterface $category, StreamInterface $stream)
+    {
+        $this->record = $record;
+        $this->category = $category;
+        $this->stream = $stream;
+    }
+
+    public function showIncome()
+    {
+        $records = $this->record->byType('income')->all();
+        $categories = $this->category->getDropdownArray('income');
+        $streams = $this->stream->getDropdownArray();
+        $type = 'income';
+
+        return View::make('records.listIncome')
+            ->with(compact('records', 'categories', 'streams', 'type'));
+    }
+
+    public function showExpenses()
+    {
+        $records = $this->record->byType('expense')->all();
+        $categories = $this->category->getDropdownArray('expense');
+        $streams = $this->stream->getDropdownArray();
+        $type = 'expense';
+
+        return View::make('records.listExpenses')
+            ->with(compact('records', 'categories', 'streams', 'type'));
+    }
 
 	/**
 	 * Store a newly created resource in storage.
@@ -31,30 +56,6 @@ class RecordsController extends \BaseController {
 	 * @return Response
 	 */
 	public function store()
-	{
-		//
-	}
-
-	/**
-	 * Display the specified resource.
-	 * GET /records/{id}
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
-	{
-		//
-	}
-
-	/**
-	 * Show the form for editing the specified resource.
-	 * GET /records/{id}/edit
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
 	{
 		//
 	}

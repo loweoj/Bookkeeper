@@ -20,10 +20,11 @@ class CreateTransactionsTable extends Migration {
 			$table->string('description');
 			$table->decimal('amount');
             $table->string('type');
-            $table->enum('reconciled', [0,1]);
+            $table->enum('reconciled', [0,1])->default(0);
             $table->integer('statement_id')->unsigned();
+            $table->softDeletes();
+            $table->timestamps();
             $table->foreign('statement_id')->references('id')->on('statements');
-			$table->timestamps();
 		});
 	}
 
