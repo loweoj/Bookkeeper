@@ -1,29 +1,55 @@
 <?php  namespace Bookkeeper\Transformer\Rules;
 
+use Bookkeeper\Repo\Rule\RuleInterface;
+use DebugBar\DebugBar;
 use Illuminate\Database\Eloquent\Model;
 
 class RuleManager {
 
-    public function __construct()
+    /**
+     * @var RuleConditionManager
+     */
+    private $conditionManager;
+
+    /**
+     * @var RuleResultManager
+     */
+    private $resultManager;
+
+    public function __construct(RuleInterface $rulesRepo,  RuleConditionManager $conditionManager, RuleResultManager $resultManager)
     {
-        // Sliming
-        $this->rules = [
-            new
-        ];
+        $this->rulesRepo = $rulesRepo;
+        $this->conditionManager = $conditionManager;
+        $this->resultManager = $resultManager;
+
+        // Fetch DB Rules
+        $this->rules = $this->rulesRepo->all();
+        \Debugbar::info($this->rules);
     }
 
     /**
-     * Run a set of rules on a single transaction
+     * Run the set of rules on a single transaction
      *
      * @param Model $transaction
-     * @return Model
+     * @return array One or more modified transactions
      */
     public function run(Model $transaction)
     {
         foreach( $this->rules as $rule )
         {
-            $rule->run($transaction);
+            if( $transaction == null )
+            {
+                throw new \Exception('ResultManager::Results returning null value.');
+            }
+
+            // could cause issues running a rule on an array in future rules...?
+            // $transaction is an array.
+            if ( $this->conditionManager->runConditions($transaction, $rule) )
+            {
+                $transaction = $this->resultManager->runResults($transaction, $rule->toArray());
+            }
         }
+
         return $transaction;
     }
 

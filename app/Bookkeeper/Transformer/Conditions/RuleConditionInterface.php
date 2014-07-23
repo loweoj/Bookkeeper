@@ -5,8 +5,10 @@ interface RuleConditionInterface {
     /**
      * Perform a test on the given subject
      *
-     * @return bool
+     * @param $value
+     * @param $subject
+     * @return mixed
      */
-    public function test($subject);
+    public function test($field, $value);
 
 } 
