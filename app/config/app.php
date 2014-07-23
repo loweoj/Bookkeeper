@@ -125,6 +125,7 @@ return array(
         // Bookkeeper
         'Bookkeeper\Repo\RepoServiceProvider',
         'Bookkeeper\Service\Form\FormServiceProvider',
+        'Bookkeeper\Transformer\TransformerServiceProvider',
 
         // Packages
         'Way\Generators\GeneratorsServiceProvider',
@@ -197,8 +198,8 @@ return array(
 		'URL'               => 'Illuminate\Support\Facades\URL',
 		'Validator'         => 'Illuminate\Support\Facades\Validator',
 		'View'              => 'Illuminate\Support\Facades\View',
-		'Carbon'			=> 'Carbon\Carbon'
-
+		'Carbon'			=> 'Carbon\Carbon',
+        'Debugbar'          => 'Barryvdh\Debugbar\Facade',
 	),
 
 );
