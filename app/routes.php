@@ -47,12 +47,13 @@ Route::get('/splitJson', function () {
 /**
  * Transactions List
  */
-Route::get('transactions', 'TransactionsController@index');
+Route::get('transactions', ['uses' => 'TransactionsController@index', 'as' => 'transactions.index']);
 
 /**
  * Statement Import Handler
  */
 Route::post('statements/import', ['uses' => 'StatementsController@import', 'as' => 'statements.import']);
+// Route::get('statements/import', 'StatementsController@erm');
 
 /**
  * Records Resource
