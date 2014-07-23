@@ -1,5 +1,5 @@
 <?php
 
-class BaseModelTest extends TestCase {
-
-}
+//class BaseModelTest extends TestCase {
+//
+//}
