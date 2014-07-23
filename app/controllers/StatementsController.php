@@ -15,9 +15,8 @@ class StatementsController extends \BaseController {
      */
     private $importForm;
 
-    public function __construct(ImportStatementForm $importForm )
+    public function __construct(ImportStatementForm $importForm)
 	{
-//		$this->commandBus = $commandBus;
         $this->importForm = $importForm;
     }
 
@@ -29,14 +28,25 @@ class StatementsController extends \BaseController {
 	 */
 	public function import()
 	{
-//		$file = Input::file('file');
+        $categories = [
+            1 => 'Category One',
+            2 => 'Category Two',
+            3 => 'Category Three'
+        ];
 
         if( $this->importForm->import(Input::all()) )
         {
-            return Redirect::route('statements.import')->with('status', 'success');
+            $transactions = $this->importForm->getTransactions();
+            return View::make('transactions.list')
+                ->with('transactions', $transactions)
+                ->with('categories', $categories);
+
+//            return Redirect::route('transactions.index')
+//                ->with('status', 'success')
+//                ->with('transactions', $transactions);
         }
 
-        return Redirect::back()
+        return Redirect::route('transactions.index')
             ->withInput()
             ->withErrors( $this->importForm->errors() )
             ->with('status', 'error');
