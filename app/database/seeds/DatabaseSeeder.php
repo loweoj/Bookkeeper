@@ -13,10 +13,10 @@ class DatabaseSeeder extends Seeder {
 
         Stream::truncate();
         Category::truncate();
+        Rule::truncate();
         Statement::truncate();
         Transaction::truncate();
         Record::truncate();
-        Rule::truncate();
 
         DB::statement('SET FOREIGN_KEY_CHECKS=1');
 

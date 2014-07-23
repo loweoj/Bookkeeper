@@ -1,6 +1,6 @@
 <?php
 
-class BaseModel extends Eloquent {
+class BaseModel extends \Eloquent {
 
     /**
      * Error message bag

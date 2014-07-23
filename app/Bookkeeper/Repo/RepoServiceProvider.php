@@ -2,12 +2,14 @@
 
 use Bookkeeper\Repo\Category\EloquentCategory;
 use Bookkeeper\Repo\Record\EloquentRecord;
+use Bookkeeper\Repo\Rule\EloquentRule;
 use Bookkeeper\Repo\Statements\EloquentStatement;
 use Bookkeeper\Repo\Stream\EloquentStream;
 use Bookkeeper\Repo\Transaction\EloquentTransaction;
 use Category;
 use Illuminate\Support\ServiceProvider;
 use Record;
+use Rule;
 use Stream;
 use Transaction;
 
@@ -49,6 +51,15 @@ class RepoServiceProvider extends ServiceProvider
 //                $app->make('Bookkeeper\Repo\Transaction\TransactionInterface')
             );
         });
+
+        // Rule
+        $app->bind('Bookkeeper\Repo\Rule\RuleInterface', function ($app) {
+            $record = new EloquentRule(
+                new Rule
+            );
+            return $record;
+        });
+
         // Category
         $app->bind('Bookkeeper\Repo\Category\CategoryInterface', function ($app) {
             return new EloquentCategory(

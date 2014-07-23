@@ -26,14 +26,14 @@ class RulesTableSeeder extends Seeder
 
     protected $conditions = [
         [
-            'filter' => 'payee',
+            'field' => 'payee',
             'match'  => 'contains',
             'value'  => 'Lul Ticket Machine'
         ],
         [
-            'filter' => 'payee',
+            'field' => 'payee',
             'match'  => 'contains',
-            'value'  => 'o2'
+            'value'  => 'O2'
         ]
     ];
 
@@ -58,20 +58,52 @@ class RulesTableSeeder extends Seeder
                 'splitJson'      => json_encode($this->split),
             ],
             [
-                'title'         => 'Match SINFONIETTA PRODT',
+                'title'         => 'Match TESCO',
                 'conditionJson' => json_encode([
                     [
-                        'filter' => 'payee',
+                        'field' => 'payee',
                         'match'  => 'contains',
-                        'value'  => 'SINFONIETTA PRODT'
+                        'value'  => 'TESCO'
                     ]
                 ]),
                 'conditionType' => 'any',
-                'to_payee'      => 'London Sinfonietta',
+                'to_payee'      => 'Tesco Food - CHANGED BY TEST RULE',
                 'to_category'    => '',
                 'to_stream'      => '',
                 'to_description' => '',
                 'splitJson'      => json_encode($this->split),
+            ],
+            [
+                'title'         => 'Match O2',
+                'conditionJson' => json_encode([
+                    [
+                        'field' => 'payee',
+                        'match'  => 'contains',
+                        'value'  => 'O2'
+                    ]
+                ]),
+                'conditionType' => 'any',
+                'to_payee'      => 'O2 Mobile - CHANGED BY TEST RULE',
+                'to_category'    => '',
+                'to_stream'      => '',
+                'to_description' => '',
+                'splitJson'      => json_encode($this->split),
+            ],
+            [
+                'title'         => 'Match SINFONIETTA',
+                'conditionJson' => json_encode([
+                    [
+                        'field' => 'payee',
+                        'match'  => 'contains',
+                        'value'  => 'SINFONIETTA'
+                    ]
+                ]),
+                'conditionType' => 'any',
+                'to_payee'      => 'London Sinfonietta - CHANGED BY TEST RULE',
+                'to_category'    => '',
+                'to_stream'      => '',
+                'to_description' => '',
+                'splitJson'      => '',
             ],
 
         ];
