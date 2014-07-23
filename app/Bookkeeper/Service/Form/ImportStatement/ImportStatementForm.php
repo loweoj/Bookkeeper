@@ -3,11 +3,18 @@
 use Bookkeeper\Repo\Statements\StatementInterface;
 use Bookkeeper\Service\Form\AbstractValidableForm;
 use Bookkeeper\Service\Validation\ValidableInterface;
-use Exception;
+use Bookkeeper\Transformer\TransactionTransformer;
+use \Exception;
+use \Response;
 use Illuminate\Database\Eloquent\Model;
 use OfxParser\Parser;
 
 class ImportStatementForm extends AbstractValidableForm {
+
+    /**
+     * @var
+     */
+    protected $transactions;
 
     /**
      * @var StatementInterface
@@ -19,56 +26,59 @@ class ImportStatementForm extends AbstractValidableForm {
      */
     private $ofxParser;
 
-    public function __construct(Parser $ofxParser, ValidableInterface $validator, StatementInterface $statement)
+    /**
+     * @var TransactionTransformer
+     */
+    private $transactionTransformer;
+
+    public function __construct(TransactionTransformer $transactionTransformer, Parser $ofxParser, ValidableInterface $validator, StatementInterface $statement)
     {
         $this->validator = $validator;
         $this->statement = $statement;
         $this->ofxParser = $ofxParser;
+        $this->transactionTransformer = $transactionTransformer;
     }
 
     public function import($input)
     {
+        // valid() adds validation error message.
         if( ! $this->valid($input) ) {
             return false;
         }
 
-        try {
+//        try {
             // Parse file
             $ofx = $this->ofxParser->loadFromFile($input['file']->getRealPath());
 
             // Run rules
             $transactions = $ofx->BankAccount->Statement->transactions;
-
             $transactions = $this->transactionTransformer->transform($transactions);
 
-            /////// EXAMPLE IMPLEMENTATION - procedural style
-            /*
+            $this->transactions = $transactions;
 
-            if( str_contains('something',$transaction->payee) )
-                splittransaction: category, stream, percentage
+//        } catch (Exception $e) {
+//            $this->errors()->add('data', 'There was an error importing your data: ' . $e->getMessage());
+//            dd($e);
+//            return false;
+//        }
+        /*
+
+        $this->statement->create([
+            'start_date' => $ofx->BankAccount->Statement->startDate,
+            'end_date' => $ofx->BankAccount->Statement->endDate,
+            'transactions' => $transactions
+        ]);
+
+        return Response::json('success', 200);
+        */
 
 
 
+    }
 
-
-            *///////
-
-
-
-            $this->statement->create([
-                'start_date' => $ofx->BankAccount->Statement->startDate,
-                'end_date' => $ofx->BankAccount->Statement->endDate,
-                'transactions' => $transactions
-            ]);
-
-            return Response::json('success', 200);
-
-        } catch (Exception $e) {
-            // Could not find the file.
-            print_r($e->getMessage());
-            return Response::json($e->getMessage(), 400);
-        }
-
+    public function getTransactions()
+    {
+        return $this->transactions;
     }
 
 //    protected function createTransactions(Model $statement, array $transactions)
