@@ -47,7 +47,7 @@ class SplitManagerTest extends \TestCase
     public function test_splitTransactionReturnsArray()
     {
         $transaction = new stdClass;
-        $splitJson = [ new stdClass ];
+        $splitJson = [new stdClass];
         $this->assertInternalType('array', $this->splitManager->splitTransaction($transaction, $splitJson));
     }
 
@@ -85,8 +85,8 @@ class SplitManagerTest extends \TestCase
         // Loop through the transactions
         foreach ($transactions as $i => $t) {
             // Loop through the expected changed fields from json
-            foreach( $splitJson[$i] as $key => $val ) {
-                if( property_exists($t, $key) ) {
+            foreach ($splitJson[$i] as $key => $val) {
+                if (property_exists($t, $key)) {
                     $this->assertEquals($val, $t->{$key});
                 }
             }
@@ -104,6 +104,7 @@ class SplitManagerTest extends \TestCase
         $transaction->date = '2014-05-05 15:16:30';
         $splitJson = json_decode($this->splitJsonData);
 
+        // Mock the percentage calculator to return 100 each time
         $percentageCalc = M::mock($this->calculatorMockName);
         $percentageCalc->shouldReceive('newCalculation')->once();
         $percentageCalc->shouldReceive('calculate')

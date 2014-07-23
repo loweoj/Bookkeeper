@@ -1,9 +1,9 @@
 <?php  namespace Bookkeeper\Transformer\Split;
 
-
 use Bookkeeper\Transformer\Split\Calculator\CalculatorInterface;
 
-class SplitManager {
+class SplitManager
+{
 
     /**
      * @var CalculatorInterface
@@ -20,29 +20,40 @@ class SplitManager {
         $transactions = [];
 
         // Start a new percentage calculation
-        if( isset($transaction->amount) ) {
+        if (isset($transaction->amount)) {
             $this->calculator->newCalculation($transaction->amount, count($splitObjects));
         }
 
-        foreach( $splitObjects as $split )
-        {
+        foreach ($splitObjects as $split) {
             $clone = clone $transaction;
             // Spin through and change the values on this clone
-            foreach( $split as $key => $val ) {
-
-                if( $key == 'percentage' ) {
-                    $amount = $this->calculator->calculate($transaction->amount, $val);
-                    $clone->amount = $amount;
-                    continue;
-                }
-
-                // Set the value on clone
-                $clone->$key = $val;
-            }
+            $clone = $this->fillClone($transaction, $split, $clone);
             $transactions[] = $clone;
             unset($clone);
         }
+
         return $transactions;
     }
 
-} 
+    /**
+     * @param $transaction
+     * @param $split
+     * @param $clone
+     */
+    protected function fillClone($transaction, $split, $clone)
+    {
+        foreach ($split as $key => $val) {
+
+            if ($key == 'percentage') {
+                $amount = $this->calculator->calculate($transaction->amount, $val);
+                $clone->amount = $amount;
+                continue;
+            }
+
+            // Set the value on clone
+            $clone->$key = $val;
+        }
+
+        return $clone;
+    }
+}

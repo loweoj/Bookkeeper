@@ -1,6 +1,6 @@
 <?php  namespace Bookkeeper\Transformer;
 
-use Bookkeeper\Transformer\Split\PercentageCalculator;
+use Bookkeeper\Transformer\Split\Calculator\PercentageCalculator;
 use Illuminate\Support\ServiceProvider;
 
 class TransformerServiceProvider extends ServiceProvider {
