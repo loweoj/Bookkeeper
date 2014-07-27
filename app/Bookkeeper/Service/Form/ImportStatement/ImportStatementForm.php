@@ -3,7 +3,8 @@
 use Bookkeeper\Repo\Statements\StatementInterface;
 use Bookkeeper\Service\Form\AbstractValidableForm;
 use Bookkeeper\Service\Validation\ValidableInterface;
-use Bookkeeper\Transformer\TransactionTransformer;
+use Bookkeeper\Transformer\OfxTransactionTransformer;
+use Bookkeeper\Transformer\TransactionTransformerInterface;
 use \Exception;
 use \Response;
 use Illuminate\Database\Eloquent\Model;
@@ -31,12 +32,18 @@ class ImportStatementForm extends AbstractValidableForm {
      */
     private $transactionTransformer;
 
-    public function __construct(TransactionTransformer $transactionTransformer, Parser $ofxParser, ValidableInterface $validator, StatementInterface $statement)
+    /**
+     * @var StatementParserInterface
+     */
+//    private $statementParser;
+
+    public function __construct(TransactionTransformerInterface $transformer, Parser $ofxParser, ValidableInterface $validator, StatementInterface $statement)
     {
         $this->validator = $validator;
         $this->statement = $statement;
         $this->ofxParser = $ofxParser;
-        $this->transactionTransformer = $transactionTransformer;
+        $this->transactionTransformer = $transformer;
+//        $this->statementParser = $statementParser;
     }
 
     public function import($input)
@@ -46,15 +53,23 @@ class ImportStatementForm extends AbstractValidableForm {
             return false;
         }
 
+        // get file type and get a file parser
+        // parse the file and get transactions
+
+
+
 //        try {
             // Parse file
             $ofx = $this->ofxParser->loadFromFile($input['file']->getRealPath());
 
             // Run rules
             $transactions = $ofx->BankAccount->Statement->transactions;
+
             $transactions = $this->transactionTransformer->transform($transactions);
 
             $this->transactions = $transactions;
+
+        dd($transactions);
 
 //        } catch (Exception $e) {
 //            $this->errors()->add('data', 'There was an error importing your data: ' . $e->getMessage());

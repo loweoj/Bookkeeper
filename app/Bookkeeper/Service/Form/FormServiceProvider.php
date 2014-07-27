@@ -14,10 +14,14 @@ class FormServiceProvider extends ServiceProvider {
     public function register()
     {
         $app = $this->app;
+
+        $app->bind('Bookkeeper\Transformer\TransactionTransformerInterface', 'Bookkeeper\Transformer\OfxTransactionTransformer');
+
         $app->bind('Bookkeeper\Service\Form\ImportStatement\ImportStatementForm', function($app)
         {
             return new ImportStatementForm(
-                $app->make('Bookkeeper\Transformer\TransactionTransformer'),
+                $app->make('Bookkeeper\Transformer\TransactionTransformerInterface'),
+
                 new \OfxParser\Parser(),
                 new ImportStatementLaravelValidator( $app['validator'] ),
                 $app->make('Bookkeeper\Repo\Statement\StatementInterface')

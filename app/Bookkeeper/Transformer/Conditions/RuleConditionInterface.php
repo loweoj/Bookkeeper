@@ -1,4 +1,4 @@
-<?php namespace Bookkeeper\Transformer\Rules;
+<?php namespace Bookkeeper\Transformer\Conditions;
 
 interface RuleConditionInterface {
 

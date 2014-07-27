@@ -18,26 +18,28 @@ class RuleResultManager {
         $this->splitManager = $splitManager;
     }
 
-
-    public function runResults($transaction, Array $ruleFields)
+    /**
+     * @param \Transaction $transaction
+     * @param \Rule $rule
+     * @return array
+     */
+    public function runResults($transaction, $rule)
     {
         // replace field matches
-        foreach( $ruleFields as $ruleKey => $ruleField) {
-            if( starts_with($ruleKey, 'to_') && $ruleFields[$ruleKey] != '')
+        foreach( $rule->toArray() as $ruleKey => $ruleField) {
+            if( starts_with($ruleKey, 'to_') && $ruleField != '')
             {
                 $field = str_replace('to_', '', $ruleKey);
-                $transaction->{$field} = $ruleFields[$ruleKey];
+                $transaction->{$field} = $ruleField;
             }
         }
 
         // create split transaction
-        if(isset($ruleFields) && $ruleFields['splitJson'] != '')
+        if($rule->splitJson != '')
         {
-            return $this->splitManager->splitTransaction($transaction, $ruleFields['splitJson']);
+            return $this->splitManager->splitTransaction($transaction, $rule->splitJson);
         }
 
-        // create an array to unify return type
-        // If the result requires a split it would be an array.
         return $transaction;
     }
 

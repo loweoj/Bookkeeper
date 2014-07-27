@@ -22,6 +22,7 @@ class CreateRecordsTable extends Migration {
 			$table->decimal('money_out')->nullable();
             $table->integer('transaction_id')->nullable()->unsigned();
             $table->integer('category_id')->unsigned();
+            $table->enum('status', ['draft','accepted']);
             $table->softDeletes();
             $table->timestamps();
 			$table->foreign('transaction_id')->references('id')->on('transactions');

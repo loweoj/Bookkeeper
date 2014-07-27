@@ -19,6 +19,11 @@ class SplitManager
     {
         $transactions = [];
 
+//        if( isset($transaction->splits) )
+//        {
+//
+//        }
+
         // Start a new percentage calculation
         if (isset($transaction->amount)) {
             $this->calculator->newCalculation($transaction->amount, count($splitObjects));
@@ -32,6 +37,7 @@ class SplitManager
             unset($clone);
         }
 
+        // $transaction->splits = $transactions;
         return $transactions;
     }
 

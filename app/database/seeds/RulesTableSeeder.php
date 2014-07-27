@@ -48,10 +48,14 @@ class RulesTableSeeder extends Seeder
     {
         return [
             [
-                'title'         => 'Split TFL and O2',
-                'conditionJson' => json_encode($this->conditions),
+                'title'         => 'Split TFL',
+                'conditionJson' => json_encode([
+                    'field' => 'payee',
+                    'match'  => 'contains',
+                    'value'  => 'Lul Ticket Machine'
+                ]),
                 'conditionType' => 'any',
-                'to_payee'      => '',
+                'to_payee'      => 'TFL',
                 'to_category'   => '',
                 'to_stream'     => '',
                 'to_description' => '',
@@ -71,7 +75,7 @@ class RulesTableSeeder extends Seeder
                 'to_category'    => '',
                 'to_stream'      => '',
                 'to_description' => '',
-                'splitJson'      => json_encode($this->split),
+                'splitJson'      => '',
             ],
             [
                 'title'         => 'Match O2',
@@ -87,7 +91,7 @@ class RulesTableSeeder extends Seeder
                 'to_category'    => '',
                 'to_stream'      => '',
                 'to_description' => '',
-                'splitJson'      => json_encode($this->split),
+                'splitJson'      => '',
             ],
             [
                 'title'         => 'Match SINFONIETTA',

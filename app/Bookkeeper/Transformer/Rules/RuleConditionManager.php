@@ -40,6 +40,14 @@ class RuleConditionManager {
         $conditionResultsArray = [];
         foreach ($dbRule->conditions as $dbCondition) {
             $condition = $this->conditionFactory->make($dbCondition->match);
+
+//            if( gettype($transaction) !== 'object' ) {
+//                dd($transaction);
+//            }
+//            if( gettype($dbCondition) !== 'object' ) {
+//                dd($dbCondition);
+//            }
+
             $conditionResultsArray[] = $condition->test($transaction->{$dbCondition->field}, $dbCondition->value);
         }
         return $conditionResultsArray;

@@ -44,10 +44,10 @@ class PercentageCalculator implements CalculatorInterface
         // Add this percentage onto the seen list
         $this->seenPercentageAmounts[] = $percentage;
 
-        // If we have seen all expected amounts, the  we
+        // If we have seen all expected amounts, then we
         // calculate the remainder and add it onto the last
         // percentage. This ensures the individual splits
-        // total the initial amount that we recieved.
+        // total the initial amount that we received.
         if (count($this->seenPercentageAmounts) == (int)$this->expectedNumberOfPercentages) {
             $remainder = $this->calculateRemainder();
             $percentage = bcadd($percentage, $remainder, 2);

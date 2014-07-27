@@ -44,7 +44,7 @@ class SplitManagerTest extends \TestCase
         M::close();
     }
 
-    public function test_splitTransactionReturnsArray()
+    public function test_split_transaction_returns_array()
     {
         $transaction = new stdClass;
         $splitJson = [new stdClass];

@@ -24,29 +24,27 @@ class RuleManager {
 
         // Fetch DB Rules
         $this->rules = $this->rulesRepo->all();
-        \Debugbar::info($this->rules);
     }
 
     /**
      * Run the set of rules on a single transaction
      *
      * @param Model $transaction
-     * @return array One or more modified transactions
+     * @return array|Model
+     * @throws \Exception
      */
     public function run(Model $transaction)
     {
         foreach( $this->rules as $rule )
         {
-            if( $transaction == null )
-            {
-                throw new \Exception('ResultManager::Results returning null value.');
-            }
-
             // could cause issues running a rule on an array in future rules...?
-            // $transaction is an array.
+            // $transaction is an array when it returns from runResults
             if ( $this->conditionManager->runConditions($transaction, $rule) )
             {
-                $transaction = $this->resultManager->runResults($transaction, $rule->toArray());
+                $transaction = $this->resultManager->runResults($transaction, $rule);
+                if(gettype($transaction) == 'array') {
+                    dd($transaction);
+                }
             }
         }
 
