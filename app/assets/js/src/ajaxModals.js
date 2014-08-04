@@ -12,6 +12,8 @@ BookKeeper.UI.AjaxModals = function()
     {
         // Load js modal template
         $modalTable.on('click', '.js-modal-edit', showEditModal);
+        // $('#editModal').on('show.bs.modal', showEditModal);
+
         $modalTable.on('click', '.js-modal-delete', showDeleteModal);
 
         // Add clicked name onto form data
@@ -23,22 +25,6 @@ BookKeeper.UI.AjaxModals = function()
         $.subscribe('ajax.modal.success.createItem', postCreateModal);
         $.subscribe('ajax.modal.success.editItem', postEditModal);
 
-        // Category Form Subscribers for handling CODE helpers
-        var catCode = 0;
-        $.subscribe('postCreateModal.preResetform', function(e, $form, data){
-            // Cache the old CODE
-            catCode = $('input[data-next-code]').val();
-        });
-        $.subscribe('postCreateModal.postResetform', function(e, $form, data){
-            // Increase next code
-            ++catCode;
-            $('input[data-next-code]').val(catCode);
-        });
-        $.subscribe('deleteModal.success', function(e, $form){
-            $('input[data-next-code]').val('');
-        });
-
-
     };
 
     /**
@@ -48,17 +34,16 @@ BookKeeper.UI.AjaxModals = function()
     var showEditModal = function(e)
     {
         e.preventDefault();
-
         // the edit link
         $this = $(this);
+        $modal = $('#editModal');
         var itemJson = $(this).parents('tr').data('json');
-
-        var template = $('#editModalTemplate').html();
+        var template = unescape($modal.html());
         var modalHtml = tmpl(template, {jsItem: itemJson});
 
         // Show the modal
-        $modal = $(modalHtml).addClass('js-templatedModal');
-        $('body').append($modal);
+        $modal = $modal.html(modalHtml).addClass('js-templatedModal');
+//        $('body').append($modal);
         $modal.modal({show:false});
 
         // Remove modal from DOM when hidden
@@ -94,9 +79,9 @@ BookKeeper.UI.AjaxModals = function()
         // Publish post-reset event to do any work
         $.publish('postCreateModal.postResetform', [$form, data]);
 
-        // Append the new row
+        // Prepend the new row
         $tr = $(data);
-        $modalTable.append($tr);
+        $modalTable.prepend($tr);
         $tr.effect("highlight", {}, 3000);
     };
 

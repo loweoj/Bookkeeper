@@ -107,11 +107,12 @@
 
 
 {{-- Include Edit Form --}}
-<script type="text/js-template" id="editModalTemplate">
+{{-- Only render script tag if page is not ajax response. --}}
+{{-- <script type="text/js-template" id="editModalTemplate"> --}}
     <div class="modal fade  js-ajax-modal" id="editModal" tabindex="-1" role="dialog" aria-labelledby="Edit Category">
         <div class="modal-dialog">
             <div class="modal-content">
-                {{ Form::rawOpen(['route' => ['categories.update', 'rawOpenPlaceholder'], 'method'=>'post', 'class' => 'form-horizontal  js-ajax-form-editCategory'], '<%= jsItem.id %>') }}
+                {{ Form::rawOpen(['route' => ['categories.update', 'rawOpenPlaceholder'], 'method'=>'post', 'class' => 'form-horizontal  js-ajax-form-editItem'], '<%= jsItem.id %>') }}
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                     <h4 class="modal-title">Edit <%= jsItem.name %></h4>
@@ -149,5 +150,5 @@
             </div>
         </div>
     </div>
-</script>
+{{-- </script> --}}
 @stop
