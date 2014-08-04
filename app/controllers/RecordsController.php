@@ -4,7 +4,8 @@ use Bookkeeper\Repo\Category\CategoryInterface;
 use Bookkeeper\Repo\Record\RecordInterface;
 use Bookkeeper\Repo\Stream\StreamInterface;
 
-class RecordsController extends \BaseController {
+class RecordsController extends \BaseController
+{
 
     /**
      * @var RecordInterface
@@ -49,39 +50,68 @@ class RecordsController extends \BaseController {
             ->with(compact('records', 'categories', 'streams', 'type'));
     }
 
-	/**
-	 * Store a newly created resource in storage.
-	 * POST /records
-	 *
-	 * @return Response
-	 */
-	public function store()
-	{
-		//
-	}
+    /**
+     * Store a newly created resource in storage.
+     * POST /records
+     *
+     * @return Response
+     */
+    public function store()
+    {
+        $record = new Record(Input::all());
 
-	/**
-	 * Update the specified resource in storage.
-	 * PUT /records/{id}
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
-	{
-		//
-	}
+        if ($record->save()) {
+            if (Request::ajax()) {
+                $categories = $this->category->getDropdownArray('expense');
+                $streams = $this->stream->getDropdownArray();
+                $renderedRow = View::make('records.table.singleRow')->with(compact('record','categories','streams'))->render();
 
-	/**
-	 * Remove the specified resource from storage.
-	 * DELETE /records/{id}
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id)
-	{
-		//
-	}
+                return Response::json(['success' => true, 'payload' => $renderedRow]);
+            }
 
+            Session::flash('success', 'Record created successfully!');
+
+            return Redirect::route($record->type . '.index');
+        }
+
+        return Redirect::back()->withInput()->withErrors($record->getErrors());
+    }
+
+    /**
+     * Update the specified resource in storage.
+     * POST /records/{id}
+     *
+     * @param  int $id
+     * @return Response
+     */
+    public function update($id)
+    {
+        $record = $this->record->find($id);
+        if ($record->update(Input::all())) {
+
+            if (Request::ajax()) {
+                $categories = $this->category->getDropdownArray('expense');
+                $streams = $this->stream->getDropdownArray();
+                $renderedRow = View::make('records.table.singleRow')->with(compact('record','categories','streams'))->render();
+
+                return Response::json(['success' => true, 'payload' => $renderedRow]);
+            }
+            Session::flash('success', 'Record updated successfully!');
+            return Redirect::route($record->type . '.index');
+        }
+
+        return Redirect::back()->withInput()->withErrors($record->getErrors());
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     * DELETE /records/{id}
+     *
+     * @param  int $id
+     * @return Response
+     */
+    public function destroy($id)
+    {
+        //
+    }
 }

@@ -15,7 +15,7 @@ class RecordsTableSeeder extends Seeder {
         foreach( range(1, 20) as $index )
         {
             $defaultFields = [
-                'date' => $faker->dateTime()->format('Y-m-d H:i:s'),
+                'date' => $faker->dateTimeBetween('-1 month', 'now')->format('d/m/Y'),
                 'payee' => $faker->name,
                 'description' => $faker->sentence(),
                 'transaction_id' => $faker->randomElement($transaction_ids),

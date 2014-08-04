@@ -42,12 +42,17 @@ class EloquentRecord implements RecordInterface {
         $this->resetQuery();
     }
 
+    public function find($id)
+    {
+        return $this->record->find($id);
+    }
+
     /**
      * @return $this
      */
     public function getIncome()
     {
-        $this->query->whereNotNull('money_in');
+        $this->query->whereType('income');
         return $this;
     }
 
@@ -56,17 +61,17 @@ class EloquentRecord implements RecordInterface {
      */
     public function getExpenses()
     {
-        $this->query->whereNotNull('money_out');
+        $this->query->whereType('expense');
         return $this;
     }
 
     public function byType($type)
     {
         if ($type == 'income') {
-            $this->query->whereNotNull('money_in');
+            $this->query->whereType('income');
             return $this;
         }
-        $this->query->whereNotNull('money_out');
+        $this->query->whereType('expense');
         return $this;
     }
 

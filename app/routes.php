@@ -69,8 +69,10 @@ Route::get('income', ['uses' => 'RecordsController@showIncome', 'as' => 'income.
 Route::get('expenses', ['uses' => 'RecordsController@showExpenses', 'as' => 'expenses.index']);
 
 Route::post('records', ['uses' => 'RecordsController@store', 'as' => 'records.create']);
-//Route::post('settings/categories/edit/{category}', ['uses' => 'CategoriesController@update', 'as' => 'categories.update']);
-//Route::post('settings/categories/delete/{category}', ['uses' => 'CategoriesController@delete', 'as' => 'categories.delete']);
+Route::post('records/update/{record}', ['uses' => 'RecordsController@update', 'as' => 'records.update']);
+
+// Route::post('settings/categories/edit/{category}', ['uses' => 'CategoriesController@update', 'as' => 'categories.update']);
+// Route::post('settings/categories/delete/{category}', ['uses' => 'CategoriesController@delete', 'as' => 'categories.delete']);
 
 /**
  * Categories

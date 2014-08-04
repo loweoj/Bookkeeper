@@ -8,6 +8,7 @@ BookKeeper.UI.EditableTable = function()
     var tableSelector = '.js-editable-table';
     var rowSelector = '.js-editable-row';
     var cellValueSelector = '.js-editable-value';
+    var $editableTable = $(tableSelector);
 
     var init    = function() {
         // $('.js-transaction-table').DataTable();
@@ -19,7 +20,7 @@ BookKeeper.UI.EditableTable = function()
         init: function()
         {
             // Bind cell editing to the transaction table
-            $( tableSelector ).on('click', rowSelector + ' > td:not([data-no-edit])', EditableTable.startEditingRow);
+            $editableTable.on('click', rowSelector + ' > td:not([data-no-edit])', EditableTable.startEditingRow);
         },
 
         startEditingRow: function()
@@ -33,32 +34,11 @@ BookKeeper.UI.EditableTable = function()
             // Set editing mode
             $row.addClass('editing');
 
-            // We don't need to change the values of inputs.
-            // They are populated by the server, and stay
-            // updated as they are edited by the user.
-
-            /*
-            // Find cells
-            $cells = $row.find('td');
-
-            // Fill all the inputs with the current values.
-            $cells.each(function(){
-                cell = $(this);
-                input = cell.find('[data-editable-input]');
-
-                // If no input then get out.
-                if( input.length == 0 ) return;
-
-                // Find the value of the field
-                currentValue = cell.find( cellValueSelector ).html();
-
-                // Fill the input with the value.
-                input.val(currentValue);
-            });
+            // Cache current attributes
+            $row.data('lastAttributes', EditableTable._buildRowData($row));
 
             // Focus on the input clicked.
             $cell.find('[data-editable-input]').focus().select();
-            */
 
             // Start listening for an outside click.
             $(document).on('mouseup.stopEditingTable', EditableTable.checkShouldEndEditing);
@@ -108,15 +88,42 @@ BookKeeper.UI.EditableTable = function()
 
         saveRow: function($row)
         {
-            data = EditableTable._buildRowData($row);
-            console.log(data);
+            newData = EditableTable._buildRowData($row);
+            oldData = $row.data('lastAttributes');
+
+            // If the data is the same, we don't need to save!
+            if(_.isEqual(newData, oldData)) return;
+
+            url = $row.data('url');
+
+            // Do Ajax
+            $.ajax({
+                type: 'post',
+                url: url,
+                data: newData,
+                success: function(data) {
+                    console.log(data);
+                    if (data.success)
+                    {
+                        $.publish('editableTable.success', [$form, data.payload]);
+                    } else {
+                        $data = $(data);
+                        // Fill the form with ajax content
+                        $form.html( $data.find(namespacedFormSelector).html() );
+                        $.publish('ajax.modal.error.'+namespace, [$form, data.payload]);
+                    }
+                },
+                error: function(xhr, textStatus, thrownError) {
+                    console.log('Ajax Error: ' + xhr.status + ': ' + thrownError);
+                }
+            });
         },
 
         _buildRowData: function($row)
         {
             data = {};
             $row.find('input,select').each(function(){
-                data[this.name] = this.value;
+                data[this.name] = $(this).val();
             });
             return data;
         },

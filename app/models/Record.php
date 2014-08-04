@@ -1,6 +1,7 @@
 <?php
 
-class Record extends BaseModel {
+class Record extends BaseModel
+{
 
     protected $fillable = [
         'date',
@@ -17,17 +18,14 @@ class Record extends BaseModel {
 
     public $softDelete = true;
 
-    // protected $appends = ['amount', 'amountType', 'recordType'];
-
     protected static $create_rules = [
-        'date' => 'required',
-        'payee' => 'required',
+        'date'        => 'required',
+        'payee'       => 'required',
         'description' => 'required',
-        'amount' => 'required',
-        'type' => 'required',
+        'amount'      => 'required',
+        'type'        => 'required',
         'category_id' => 'required',
-        'stream_id'=> 'required',
-        'transaction_id' => 'required'
+        'stream_id'   => 'required'
     ];
 
     public function category()
@@ -48,19 +46,16 @@ class Record extends BaseModel {
     /**
      * @return string
      */
-//    public function getAmountTypeAttribute()
-//    {
-//        return $this->recordType == 'income' ? 'credit' : 'debit';
-//    }
+    public function getAmountTypeAttribute()
+    {
+        return $this->type == 'income' ? 'credit' : 'debit';
+    }
 
-//    public function getAmountAttribute()
-//    {
-//        return $this->money_in != null ? $this->money_in : $this->money_out;
-//    }
-
-//    public function getRecordTypeAttribute()
-//    {
-//        return $this->money_in != null ? 'income' : 'expense';
-//    }
-
+    /**
+     * @param $value
+     */
+    public function setDateAttribute($value)
+    {
+        $this->attributes['date'] = Carbon\Carbon::createFromFormat('d/m/Y', $value);
+    }
 }

@@ -12,6 +12,8 @@ interface RecordInterface {
 
     public function all();
 
+    public function find($id);
+
     public function byCategory($category);
 
     public function byPayee($payee);
