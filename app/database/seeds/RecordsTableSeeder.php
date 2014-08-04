@@ -10,6 +10,7 @@ class RecordsTableSeeder extends Seeder {
 
         $category_ids = Category::lists('id');
         $transaction_ids = Transaction::lists('id');
+        $stream_ids = Stream::lists('id');
 
         foreach( range(1, 20) as $index )
         {
@@ -18,7 +19,8 @@ class RecordsTableSeeder extends Seeder {
                 'payee' => $faker->name,
                 'description' => $faker->sentence(),
                 'transaction_id' => $faker->randomElement($transaction_ids),
-                'category_id' => $faker->randomElement($category_ids)
+                'category_id' => $faker->randomElement($category_ids),
+                'stream_id' => $faker->randomElement($stream_ids)
             ];
 
             $moneyFields = $this->chooseRandomRecordType($faker);
@@ -35,18 +37,28 @@ class RecordsTableSeeder extends Seeder {
      */
     protected function chooseRandomRecordType($faker)
     {
-        $moneyFields = ['money_in', 'money_out'];
-        $moneyEl = $faker->randomElement($moneyFields);
-
-        $return = [];
-        foreach ($moneyFields as $fieldName) {
-            if ($fieldName == $moneyEl)
-            {
-                $return[$fieldName] = $faker->randomFloat(2, 3, 500);
-                continue;
-            }
-            $return[$fieldName] = null;
+        $return  = [];
+        $return['type'] = $faker->randomElement(['income','expense']);
+        $return['amount'] = $faker->randomFloat(2, 3, 500);
+        if( $return['type'] == 'expense' ) {
+            $return['amount'] = -1 * abs($return['amount']);
         }
+
         return $return;
+
+//        $recordTypes = ['income', 'expense'];
+//        $type = $faker->randomElement($recordTypes);
+//
+//        $return = [];
+//        foreach ($recordTypes as $fieldName) {
+//            if ($fieldName == $type)
+//            {
+//                $return[$fieldName] = $faker->randomFloat(2, 3, 500);
+//                continue;
+//            }
+//            $return[$fieldName] = null;
+//        }
+//        dd($return);
+//        return $return;
     }
 }

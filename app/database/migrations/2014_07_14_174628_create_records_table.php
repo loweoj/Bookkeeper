@@ -18,15 +18,17 @@ class CreateRecordsTable extends Migration {
 			$table->datetime('date');
 			$table->string('payee');
 			$table->string('description');
-			$table->decimal('money_in')->nullable();
-			$table->decimal('money_out')->nullable();
+            $table->enum('type', ['income','expense']);
+			$table->decimal('amount');
             $table->integer('transaction_id')->nullable()->unsigned();
             $table->integer('category_id')->unsigned();
+            $table->integer('stream_id')->unsigned();
             $table->enum('status', ['draft','accepted']);
             $table->softDeletes();
             $table->timestamps();
 			$table->foreign('transaction_id')->references('id')->on('transactions');
 			$table->foreign('category_id')->references('id')->on('categories');
+            $table->foreign('stream_id')->references('id')->on('streams');
 		});
 	}
 
