@@ -4,7 +4,8 @@ use Bookkeeper\Repo\Category\CategoryInterface;
 use Bookkeeper\Repo\Stream\StreamInterface;
 use Illuminate\Database\Eloquent\Model;
 
-class EloquentRecord implements RecordInterface {
+class EloquentRecord implements RecordInterface
+{
 
     /**
      * @var Model
@@ -14,7 +15,7 @@ class EloquentRecord implements RecordInterface {
     /**
      * @var CategoryInterface
      */
-    protected  $category;
+    protected $category;
 
     /**
      * @var StreamInterface
@@ -23,6 +24,7 @@ class EloquentRecord implements RecordInterface {
 
     /**
      * The current query
+     *
      * @var \Illuminate\Database\Query\Builder
      */
     private $query;
@@ -53,6 +55,7 @@ class EloquentRecord implements RecordInterface {
     public function getIncome()
     {
         $this->query->whereType('income');
+
         return $this;
     }
 
@@ -62,6 +65,7 @@ class EloquentRecord implements RecordInterface {
     public function getExpenses()
     {
         $this->query->whereType('expense');
+
         return $this;
     }
 
@@ -69,9 +73,11 @@ class EloquentRecord implements RecordInterface {
     {
         if ($type == 'income') {
             $this->query->whereType('income');
+
             return $this;
         }
         $this->query->whereType('expense');
+
         return $this;
     }
 
@@ -83,6 +89,7 @@ class EloquentRecord implements RecordInterface {
     {
         $category = $this->category->byNameOrId($category_id_or_name);
         $this->query->whereCategoryId($category->id);
+
         return $this;
     }
 
@@ -92,7 +99,8 @@ class EloquentRecord implements RecordInterface {
      */
     public function byPayee($payee)
     {
-        $this->query->where('payee', 'LIKE', '%'.$payee.'%');
+        $this->query->where('payee', 'LIKE', '%' . $payee . '%');
+
         return $this;
     }
 
@@ -104,20 +112,25 @@ class EloquentRecord implements RecordInterface {
     {
         $stream = $this->stream->byNameorId($stream);
         $this->query->where('stream', $stream->id);
+
         return $this;
     }
 
     /**
      * Returns all of the Resources.
-
+     *
      * @return Model[]
      */
     public function all()
     {
-        $query = $this->query;
+        $results = $this->query
+            ->with('category', 'stream')
+            ->orderBy('date', 'desc')
+            ->get();
+
         $this->resetQuery();
-        return $query->orderBy('date', 'desc')
-                    ->get();
+
+        return $results;
     }
 
     /**

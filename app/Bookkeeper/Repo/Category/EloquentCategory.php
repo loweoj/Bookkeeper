@@ -74,15 +74,9 @@ class EloquentCategory implements CategoryInterface {
     public function getDropdownArray($type = null)
     {
         if( $type ) {
-            $cats = $this->category->where('type', '=', $type)->get();
-        } else {
-            $cats = $this->category->get();
+            return $this->category->where('type', '=', $type)->lists('name', 'id');
         }
-        $return = [];
-        foreach($cats as $c) {
-            $return[$c->id] = $c->name;
-        }
-        return $return;
+        return $this->category->lists('name', 'id');
     }
 
 }
