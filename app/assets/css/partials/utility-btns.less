@@ -1,1 +1,57 @@
-utility-btns.less
+/*==========  Utility Buttons  ==========*/
+/**
+ * Style of the utility buttons throughout the app
+ */
+
+/**
+ * Ensure icons are positioned inline
+ * horizontally with any util btns
+ */
+.util-btn-group {
+    [class^="glyphicon-"],
+    [class*=" glyphicon-"],
+    .glyphicon {
+        top: 4px;
+    }
+}
+
+// Transaction Btn
+.btn--util {
+    background: #ECECEC;
+    border: 1px solid #AAA;
+    box-shadow: 0 0 1px #AAA;
+    color: #5C5C5C;
+    display: inline-block;
+    padding: 0 5px;
+    .border-radius(2px);
+    .gradient(#EFEFEF, #DFDFDF);
+
+    &:hover,
+    &:focus {
+        .gradient(#DFDFDF, #EFEFEF);
+    }
+    &:active {
+        background: #DFDFDF;
+    }
+
+    // Handle dropdown carets
+    .caret {
+        border-width: 5px;
+    }
+
+    + .btn-util {
+        margin-left: 6px;
+    }
+}
+
+// Util btn with icon
+.btn--util-icon {
+    font-size: 13px;
+    padding: 1px 4px;
+
+    [class^="glyphicon-"],
+    [class*=" glyphicon-"],
+    .glyphicon {
+        top: 2px;
+    }
+}

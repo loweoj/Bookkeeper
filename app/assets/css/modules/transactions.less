@@ -1,0 +1,26 @@
+/*==========  Transactions  ==========*/
+.transaction-table {
+    .transaction-payee {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+
+.split-transaction-row {
+    & > td {
+        padding: 12px 24px !important;
+    }
+}
+
+
+.credit {
+    color: darken(@brand-success, 10%);
+    font-weight: bold;
+}
+
+.debit {
+    color: @brand-danger;
+    font-weight: bold;
+}

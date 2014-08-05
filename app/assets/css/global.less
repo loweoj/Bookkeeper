@@ -1,5 +1,5 @@
 /*==========  Bootstrap  ==========*/
-@import 'bootstrap.less';
+@import 'generic/bootstrap.less';
 
 
 /*==========  Plugins  ==========*/
@@ -8,11 +8,14 @@
 @import "vendor/dropzone.less";
 
 
+/*==========  Partials  ==========*/
+@import "partials/utility-btns.less";
+
 
 /*==========  Modules  ==========*/
-@import "partials/editable-table.less";
-@import "partials/transactions.less";
-
+@import "modules/editable-table.less";
+@import "modules/transactions.less";
+@import "modules/records.less";
 
 /*==========  Global  ==========*/
 html{
@@ -29,8 +32,8 @@ body {
 }
 
 /*==========  Base Overrides  ==========*/
-@import "partials/tables";
-@import "partials/forms";
+@import "generic/tables";
+@import "generic/forms";
 
 
 /*==========  Site  ==========*/
