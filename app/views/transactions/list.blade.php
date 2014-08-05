@@ -95,9 +95,9 @@
                         </select>
                     </td>
 
-                    <td colspan="2" class="dropdown  transaction-utils" data-no-edit>
-                        <a href="#" class="btn  btn--transaction  btn--transaction-ok"><i class="glyphicon-ok"></i></a>
-                        <a class="dropdown-toggle  btn  btn--transaction" data-toggle="dropdown" href="#">
+                    <td colspan="2" class="dropdown  util-btn-group" data-no-edit>
+                        <a href="#" class="btn  btn--util  btn--util-icon"><i class="glyphicon-ok"></i></a>
+                        <a class="dropdown-toggle  btn  btn--util" data-toggle="dropdown" href="#">
                             <i class="caret"></i>
                         </a>
                         <ul class="dropdown-menu  dropdown-menu-right" role="menu">

@@ -2,12 +2,12 @@
     <thead>
     <tr>
         <th colspan="2">Date</th>
-        <th colspan="5">Payee</th>
-        <th colspan="7">Description</th>
+        <th colspan="4">Payee</th>
+        <th colspan="6">Description</th>
         <th colspan="2" class="align-right">Amount (£)</th>
         <th colspan="4" class="align-right">Category</th>
         <th colspan="2" class="align-right">Stream</th>
-<!--        <th colspan="2">&nbsp;</th> --> <!-- utils -->
+        <th colspan="2" class="align-right">&nbsp;</th>
     </tr>
     </thead>
     <tbody>

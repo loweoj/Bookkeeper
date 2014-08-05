@@ -30661,7 +30661,6 @@ BookKeeper.UI.AjaxForms = function ()
             url: $form.attr('action'),
             data: $form.serialize(),
             success: function(data) {
-                console.log(data);
                 if (data.success)
                 {
                     $.publish('ajax.modal.success.'+namespace, [$form, data.payload]);
