@@ -17,6 +17,8 @@ class CreateAttachmentsTable extends Migration {
 			$table->increments('id');
 			$table->string('description');
 			$table->string('filepath');
+            $table->integer('record_id')->nullable()->unsigned();
+            $table->foreign('record_id')->references('id')->on('records');
 			$table->timestamps();
 		});
 	}

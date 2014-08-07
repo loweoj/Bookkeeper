@@ -43,6 +43,11 @@ class Record extends BaseModel
         return $this->belongsTo('Transaction');
     }
 
+    public function attachment()
+    {
+        return $this->hasOne('Attachment');
+    }
+
     /**
      * @return string
      */

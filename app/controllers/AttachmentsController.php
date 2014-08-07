@@ -87,7 +87,6 @@ class RecordsController extends \BaseController
         return Redirect::back()->withInput()->withErrors($record->getErrors());
     }
 
-
     /**
      * Update the specified resource in storage.
      * POST /records/{id}
@@ -115,64 +114,15 @@ class RecordsController extends \BaseController
         return Redirect::back()->withInput()->withErrors($record->getErrors());
     }
 
-
     /**
      * Remove the specified resource from storage.
-     * POST /records/{id}/attachment
+     * DELETE /records/{id}
      *
      * @param  int $id
      * @return Response
      */
-    public function attach($id)
+    public function destroy($id)
     {
-        // Get the file
-        $file = Input::file('file');
-
-        // Get extension
-        $ext = '.' . $file->getClientOriginalExtension();
-
-        // Create the filename
-        $filename = basename($file->getClientOriginalName(), $ext) . '_' . sha1(time()) . $ext;
-
-        // Clean whitespace in filename
-        $filename = preg_replace('/\s+/', '_', $filename);
-
-        // Get upload directory
-        $directory = Config::get('bk.upload_dir');
-
-        try {
-            // Move the file
-            $newFile = $file->move($directory, $filename);
-        } catch(Exception $e) {
-            Session::flash('error', $e->getMessage());
-            return Redirect::back();
-        }
-
-        $record = $this->record->find($id);
-
-        if( ! $record) {
-            return Redirect::back()->with('error', 'Record does not exist');
-        }
-
-        $attachment = new Attachment([
-            'filepath' => $newFile->getPathName(),
-            'record_id' => $record->id
-        ]);
-
-        if( $attachment->save() ) {
-
-            if (Request::ajax()) {
-                $categories = $this->category->getDropdownArray('expense');
-                $streams = $this->stream->getDropdownArray();
-                $renderedRow = View::make('records.table.singleRow')->with(compact('record', 'categories', 'streams'))->render();
-
-                return Response::json(['success' => true, 'payload' => $renderedRow]);
-            }
-            Session::flash('success', 'Attachment added successfully!');
-            return Redirect::route($record->type . '.index');
-        }
-
-        return Redirect::back()->withInput()->withErrors($attachment->getErrors());
-
+        //
     }
 }

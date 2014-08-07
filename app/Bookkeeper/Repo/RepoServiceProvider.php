@@ -1,5 +1,6 @@
 <?php namespace Bookkeeper\Repo;
 
+use Bookkeeper\Repo\Attachment\EloquentAttachment;
 use Bookkeeper\Repo\Category\EloquentCategory;
 use Bookkeeper\Repo\Record\EloquentRecord;
 use Bookkeeper\Repo\Rule\EloquentRule;
@@ -48,8 +49,16 @@ class RepoServiceProvider extends ServiceProvider
         $app->bind('Bookkeeper\Repo\Transaction\TransactionInterface', function ($app) {
             return new EloquentTransaction(
                 new Transaction
-//                $app->make('Bookkeeper\Repo\Transaction\TransactionInterface')
+                // $app->make('Bookkeeper\Repo\Transaction\TransactionInterface')
             );
+        });
+
+        // Attachment
+        $app->bind('Bookkeeper\Repo\Attachment\AttachmentInterface', function ($app) {
+            $attachment = new EloquentAttachment(
+                new Attachment
+            );
+            return $attachment;
         });
 
         // Rule
