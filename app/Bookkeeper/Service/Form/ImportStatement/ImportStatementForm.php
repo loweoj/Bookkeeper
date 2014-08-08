@@ -28,7 +28,7 @@ class ImportStatementForm extends AbstractValidableForm {
     private $ofxParser;
 
     /**
-     * @var TransactionTransformer
+     * @var TransactionTransformerInterface
      */
     private $transactionTransformer;
 
@@ -55,8 +55,6 @@ class ImportStatementForm extends AbstractValidableForm {
 
         // get file type and get a file parser
         // parse the file and get transactions
-
-
 
 //        try {
             // Parse file
@@ -86,7 +84,6 @@ class ImportStatementForm extends AbstractValidableForm {
 
         return Response::json('success', 200);
         */
-
 
 
     }

@@ -2,6 +2,8 @@
 
 use Bookkeeper\Service\Form\ImportStatement\ImportStatementForm;
 use Bookkeeper\Service\Form\ImportStatement\ImportStatementLaravelValidator;
+use Bookkeeper\Service\Form\UploadAttachment\UploadAttachmentForm;
+use Bookkeeper\Service\Form\UploadAttachment\UploadAttachmentLaravelValidator;
 use Illuminate\Support\ServiceProvider;
 
 class FormServiceProvider extends ServiceProvider {
@@ -15,16 +17,30 @@ class FormServiceProvider extends ServiceProvider {
     {
         $app = $this->app;
 
+        /**
+         * TEMP Transformer Interface
+         */
         $app->bind('Bookkeeper\Transformer\TransactionTransformerInterface', 'Bookkeeper\Transformer\OfxTransactionTransformer');
 
-        $app->bind('Bookkeeper\Service\Form\ImportStatement\ImportStatementForm', function($app)
-        {
+        /**
+         * Import Statement Form
+         */
+        $app->bind('Bookkeeper\Service\Form\ImportStatement\ImportStatementForm', function ($app) {
             return new ImportStatementForm(
                 $app->make('Bookkeeper\Transformer\TransactionTransformerInterface'),
-
                 new \OfxParser\Parser(),
-                new ImportStatementLaravelValidator( $app['validator'] ),
+                new ImportStatementLaravelValidator($app['validator']),
                 $app->make('Bookkeeper\Repo\Statement\StatementInterface')
+            );
+        });
+
+        /**
+         * Upload Attachment Form
+         */
+        $app->bind('Bookkeeper\Service\Form\UploadAttachment\UploadAttachmentForm', function ($app) {
+            return new UploadAttachmentForm(
+                new UploadAttachmentLaravelValidator($app['validator']),
+                $app->make('Bookkeeper\Image\Image')
             );
         });
     }

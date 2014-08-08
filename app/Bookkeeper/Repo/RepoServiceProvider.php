@@ -1,5 +1,6 @@
 <?php namespace Bookkeeper\Repo;
 
+use Attachment;
 use Bookkeeper\Repo\Attachment\EloquentAttachment;
 use Bookkeeper\Repo\Category\EloquentCategory;
 use Bookkeeper\Repo\Record\EloquentRecord;
@@ -55,25 +56,22 @@ class RepoServiceProvider extends ServiceProvider
 
         // Attachment
         $app->bind('Bookkeeper\Repo\Attachment\AttachmentInterface', function ($app) {
-            $attachment = new EloquentAttachment(
+            return new EloquentAttachment(
                 new Attachment
             );
-            return $attachment;
         });
 
         // Rule
         $app->bind('Bookkeeper\Repo\Rule\RuleInterface', function ($app) {
-            $record = new EloquentRule(
+            return new EloquentRule(
                 new Rule
             );
-            return $record;
         });
 
         // Category
         $app->bind('Bookkeeper\Repo\Category\CategoryInterface', function ($app) {
             return new EloquentCategory(
                 new Category
-//                new LaravelCache($app['cache'], 'tags', 10)
             );
         });
 

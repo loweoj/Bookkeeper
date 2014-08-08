@@ -1,12 +1,8 @@
 <?php  namespace Bookkeeper\Service\Form;
 
 use Bookkeeper\Service\Validation\ValidableInterface;
-use Illuminate\Mail\Message;
-use Illuminate\Support\MessageBag;
 
 abstract class AbstractValidableForm {
-
-    protected $messageBag;
 
     /**
      * @param ValidableInterface $validator
@@ -24,13 +20,7 @@ abstract class AbstractValidableForm {
      */
     public function errors()
     {
-        if( $this->validator->errors() )
-            return $this->validator->errors();
-
-        if( ! isset($this->messageBag) )
-            $this->messageBag = new MessageBag;
-
-        return $this->messageBag;
+        return $this->validator->errors();
     }
 
     /**
@@ -43,5 +33,15 @@ abstract class AbstractValidableForm {
         return $this->validator->with($input)->passes();
     }
 
-
-} 
+    /**
+     * Add an arbitrary error message to the errors
+     *
+     * @param $key
+     * @param $message
+     * @return mixed
+     */
+    protected function addError($key, $message)
+    {
+        return $this->errors()->add($key, $message);
+    }
+}

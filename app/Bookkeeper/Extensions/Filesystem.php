@@ -1,5 +1,6 @@
-<?php  namespace Bookkeeper\Facades;
+<?php  namespace Bookkeeper\Extensions;
 
+use Config;
 use Illuminate\Filesystem\Filesystem as BaseFilesystem;
 
 class Filesystem extends BaseFilesystem {
@@ -22,6 +23,10 @@ class Filesystem extends BaseFilesystem {
     public function mime($extension, $default = 'application/octet-stream')
     {
         $mimes = Config::get('mimes');
+
+        // The extensions is actually a file, so let's
+        // find the extension for the passed file.
+        if ( $this->exists($extension)) $extension = $this->extension($extension);
 
         if ( ! array_key_exists($extension, $mimes)) return $default;
 
