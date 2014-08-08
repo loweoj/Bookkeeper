@@ -1,12 +1,12 @@
 <?php
 
-Form::macro('rawInput', function($type, $name, $value = null, $options = array())
+Form::macro('rawInput', function($type, $name, $value = null, $options = [])
 {
     $input = Form::input($type, $name, '%s', $options);
     return sprintf($input, $value);
 });
 
-Form::macro('rawSelect', function($name, $list = array(), $selected = null, $options = array())
+Form::macro('rawSelect', function($name, $list = [], $selected = null, $options = [])
 {
     $select = Form::select($name, $list, '%s', $options);
     return sprintf($select, $selected);

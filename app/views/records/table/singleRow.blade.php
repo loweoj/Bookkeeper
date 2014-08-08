@@ -1,4 +1,4 @@
-<tr class="editable-row  js-editable-row" data-url="{{ URL::route('records.update', $record->id) }}">
+<tr class="editable-row  js-editable-row" id="{{ $record->id }}" data-url="{{ URL::route('records.update', $record->id) }}">
     <td colspan="2">
         <span class="js-editable-value">{{ $record->date->format('d/m/Y') }}</span>
         <input type="text" name="date" class="form-control  datepicker" data-editable-input
@@ -10,7 +10,7 @@
         <input type="text" name="payee" class="form-control" value="{{ $record->payee }}" data-editable-input>
     </td>
 
-    <td colspan="6">
+    <td colspan="8">
         <span class="js-editable-value">{{ $record->description }}</span>
         <input type="text" name="description" class="form-control" value="{{ $record->description }}"
                data-editable-input>
@@ -23,18 +23,27 @@
     </td>
 
     <td colspan="4" class="align-right">
+
         <span class="js-editable-value">{{ $record->category->name }}</span>
-        {{ Form::select('category', $categories, 1, ['class' => 'form-control', 'data-editable-input']) }}
+        {{ Form::select('category', $categories, $record->category->id, ['class' => 'form-control', 'data-editable-input']) }}
     </td>
 
     <td colspan="2" class="align-right">
         <span class="js-editable-value">{{ $record->stream->name }}</span>
-        {{ Form::select('stream', $streams, 1, ['class' => 'form-control', 'data-editable-input']) }}
+        {{ Form::select('stream', $streams, $record->stream->id, ['class' => 'form-control', 'data-editable-input']) }}
     </td>
 
     <td colspan="2" class="align-right  dropdown  util-btn-group" data-no-edit>
-        <?php $attachmentClasses = ['has-attachment', '']; ?>
-        <a href="#" class="btn--attachment {{ $attachmentClasses[array_rand($attachmentClasses, 1)] }} "><i class="glyphicon-paperclip"></i></a>
+        @if($record->hasAttachment())
+        <a href="#" data-toggle="modal" data-target="#editAttachmentModal" class="js-add-attachment  has-attachment  btn--attachment">
+            <i class="glyphicon-paperclip"></i>
+            <img class="attachment-thumb" src="/img/{{ $record->attachment->thumb }}" alt="{{ $record->attachment->name }}"/>
+        </a>
+
+        @else
+        <a href="#" data-toggle="modal" data-target="#addAttachmentModal" class="js-add-attachment  btn--attachment"><i class="glyphicon-paperclip"></i></a>
+        @endif
+
         <a class="dropdown-toggle  btn  btn--util" data-toggle="dropdown" href="#">
             <i class="caret"></i>
         </a>

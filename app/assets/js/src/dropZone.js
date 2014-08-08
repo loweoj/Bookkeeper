@@ -1,33 +1,37 @@
 if (typeof(BookKeeper) == 'undefined') {
-    BookKeeper      = {};
-    BookKeeper.UI   = {};
+    BookKeeper = {};
+    BookKeeper.UI = {};
 }
 
-BookKeeper.UI.Attachments = function()
-{
-    var tableSelector = '.js-editable-table';
-    var rowSelector = '.js-editable-row';
-    var cellValueSelector = '.js-editable-value';
-
-    var init = function()
-    {
+BookKeeper.UI.DropZone = function () {
+    var init = function () {
         initDropzone();
     };
 
-    var initDropzone = function()
-    {
-        $('.dropzone').dropzone({
+    var initDropzone = function () {
+
+        $dropzone = $('.fileDropZone');
+
+        if ($dropzone.dropzone) return;
+
+        $dropzone.dropzone({
             clickable: true,
             dictDefaultMessage: 'Drop files here or click to upload',
             uploadMultiple: false,
-            totaluploadprogress: function(p) {
-                if (p==100) {
+            totaluploadprogress: function (p) {
+                if (p == 100) {
                     // this.removeAllFiles();
+
+                    // Hide currently active modal
                     $('.modal.in').modal('hide');
+
+                    // Publish some event
+                    // $.publish('dropzone.upload.success');
+
                     // reloadTransactions();
                 }
             },
-            fallback: function(){
+            fallback: function () {
                 // $.getScript(Perch.path+'/core/assets/js/jquery.form.min.js', function(){
                 //     form.ajaxForm({
                 //         beforeSubmit: function(){
@@ -53,8 +57,8 @@ BookKeeper.UI.Attachments = function()
 
 }();
 
-if (typeof(jQuery)!='undefined') {
-    jQuery(function($) {
-        BookKeeper.UI.Attachments.init();
+if (typeof(jQuery) != 'undefined') {
+    jQuery(function ($) {
+        BookKeeper.UI.DropZone.init();
     });
 }

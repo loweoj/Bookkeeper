@@ -9,10 +9,12 @@
         @include('records._createRecordForm')
     </div>
 
-    @if( count($errors->all()) == 1 )
+    @if( count($errors->all()) )
     <div class="alert alert-danger">
         <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <p><strong>Uh oh, something went wrong!</strong> {{ $errors->all()[0] }}</p>
+        @foreach($errors->all() as $error)
+        <p>{{ $error }}</p>
+        @endforeach
     </div>
     @endif
 
