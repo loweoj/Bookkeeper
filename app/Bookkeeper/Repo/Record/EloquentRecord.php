@@ -124,7 +124,7 @@ class EloquentRecord implements RecordInterface
     public function all()
     {
         $results = $this->query
-            ->with('category', 'stream')
+            ->with('category', 'stream', 'attachment')
             ->orderBy('date', 'desc')
             ->get();
 

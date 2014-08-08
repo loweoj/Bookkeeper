@@ -1,5 +1,6 @@
 <?php  namespace Bookkeeper\Service\Validation;
 
+use Illuminate\Support\MessageBag;
 use Illuminate\Validation\Factory;
 
 abstract class AbstractLaravelValidator implements ValidableInterface {
@@ -32,6 +33,19 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
      */
     protected $rules = [];
 
+    /**
+     * Validation messages
+     *
+     * @var array
+     */
+    protected $messages = [];
+
+    /**
+     * Message bag if no errors
+     * @var
+     */
+    protected $messageBag;
+
     public function __construct(Factory $validator)
     {
         $this->validator = $validator;
@@ -56,11 +70,9 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
      */
     public function passes()
     {
-        $validator = $this->validator->make($this->data, $this->rules);
-
-        if( $validator->fails() )
-        {
-            $this->errors = $validator->messages();
+        $validator = $this->validator->make($this->data, $this->rules, $this->messages);
+        if ($validator->fails()) {
+            $this->errors()->merge($validator->messages());
             return false;
         }
 
@@ -69,12 +81,17 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
 
     /**
      * Return errors, if any
+     * Otherwise return an empty message bag.
      *
      * @return array
      */
     public function errors()
     {
+        if ( ! empty($this->errors))
+            return $this->errors;
+
+        $this->errors = new MessageBag;
+
         return $this->errors;
     }
-
-} 
+}

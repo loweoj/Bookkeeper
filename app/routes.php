@@ -56,3 +56,18 @@ Route::get('settings/streams', ['uses' => 'StreamsController@index', 'as' => 'st
 Route::post('settings/streams', ['uses' => 'StreamsController@store', 'as' => 'streams.create']);
 Route::post('settings/streams/edit/{category}', ['uses' => 'StreamsController@update', 'as' => 'streams.update']);
 Route::post('settings/streams/delete/{category}', ['uses' => 'StreamsController@delete', 'as' => 'streams.delete']);
+
+
+/**
+ * Uploaded Images
+ */
+Route::get('img/{filename}', function($filename){
+
+    $file = Config::get('image.upload_dir') . $filename;
+
+    if (empty($filename) || ! file_exists($file)) {
+        App::abort(404, 'Image Not Found');
+    }
+
+    return Image::make($file)->response();
+});

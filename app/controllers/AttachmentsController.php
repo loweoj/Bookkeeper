@@ -1,63 +1,16 @@
 <?php
 
-use Bookkeeper\Repo\Category\CategoryInterface;
-use Bookkeeper\Repo\Record\RecordInterface;
-use Bookkeeper\Repo\Stream\StreamInterface;
+use Bookkeeper\Repo\Attachment\AttachmentInterface;
 
-class RecordsController extends \BaseController
-{
-
+class AttachmentsController extends \BaseController {
     /**
-     * @var RecordInterface
+     * @var AttachmentInterface
      */
-    private $record;
+    protected $attachment;
 
-    /**
-     * @var CategoryInterface
-     */
-    private $category;
-    /**
-     * @var StreamInterface
-     */
-    private $stream;
-
-    public function __construct(RecordInterface $record, CategoryInterface $category, StreamInterface $stream)
+    public function __construct(AttachmentInterface $attachment)
     {
-        $this->record = $record;
-        $this->category = $category;
-        $this->stream = $stream;
-    }
-
-    public function showIncome()
-    {
-        $records = $this->record->byType('income')->all();
-        $categories = $this->category->getDropdownArray('income');
-        $streams = $this->stream->getDropdownArray();
-
-        // Set the type for the add record form
-        $type = 'income';
-
-        // Title the page
-        $recordTypeTitle = 'Income';
-
-        return View::make('records.listRecords')
-            ->with(compact('records', 'categories', 'streams', 'type', 'recordTypeTitle'));
-    }
-
-    public function showExpenses()
-    {
-        $records = $this->record->byType('expense')->all();
-        $categories = $this->category->getDropdownArray('expense');
-        $streams = $this->stream->getDropdownArray();
-
-        // Set the type for add record form
-        $type = 'expense';
-
-        // Title the page.
-        $recordTypeTitle = 'Expenses';
-
-        return View::make('records.listRecords')
-            ->with(compact('records', 'categories', 'streams', 'type', 'recordTypeTitle'));
+        $this->attachment = $attachment;
     }
 
     /**
@@ -68,61 +21,22 @@ class RecordsController extends \BaseController
      */
     public function store()
     {
-        $record = new Record(Input::all());
+        $attachment = new Attachment(Input::all());
 
-        if ($record->save()) {
-            if (Request::ajax()) {
-                $categories = $this->category->getDropdownArray('expense');
-                $streams = $this->stream->getDropdownArray();
-                $renderedRow = View::make('records.table.singleRow')->with(compact('record', 'categories', 'streams'))->render();
-
-                return Response::json(['success' => true, 'payload' => $renderedRow]);
-            }
+        if ($attachment->save()) {
+//            if (Request::ajax()) {
+//                $categories = $this->category->getDropdownArray('expense');
+//                $streams = $this->stream->getDropdownArray();
+//                $renderedRow = View::make('records.table.singleRow')->with(compact('record', 'categories', 'streams'))->render();
+//
+//                return Response::json(['success' => true, 'payload' => $renderedRow]);
+//            }
 
             Session::flash('success', 'Record created successfully!');
 
             return Redirect::route($record->type . '.index');
         }
 
-        return Redirect::back()->withInput()->withErrors($record->getErrors());
-    }
-
-    /**
-     * Update the specified resource in storage.
-     * POST /records/{id}
-     *
-     * @param  int $id
-     * @return Response
-     */
-    public function update($id)
-    {
-        $record = $this->record->find($id);
-        if ($record->update(Input::all())) {
-
-            if (Request::ajax()) {
-                $categories = $this->category->getDropdownArray('expense');
-                $streams = $this->stream->getDropdownArray();
-                $renderedRow = View::make('records.table.singleRow')->with(compact('record', 'categories', 'streams'))->render();
-
-                return Response::json(['success' => true, 'payload' => $renderedRow]);
-            }
-            Session::flash('success', 'Record updated successfully!');
-
-            return Redirect::route($record->type . '.index');
-        }
-
-        return Redirect::back()->withInput()->withErrors($record->getErrors());
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * DELETE /records/{id}
-     *
-     * @param  int $id
-     * @return Response
-     */
-    public function destroy($id)
-    {
-        //
+        return Redirect::back()->withInput()->withErrors($attachment->getErrors());
     }
 }

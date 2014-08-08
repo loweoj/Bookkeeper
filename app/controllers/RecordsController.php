@@ -3,9 +3,9 @@
 use Bookkeeper\Repo\Category\CategoryInterface;
 use Bookkeeper\Repo\Record\RecordInterface;
 use Bookkeeper\Repo\Stream\StreamInterface;
+use Bookkeeper\Service\Form\UploadAttachment\UploadAttachmentForm;
 
-class RecordsController extends \BaseController
-{
+class RecordsController extends \BaseController {
 
     /**
      * @var RecordInterface
@@ -20,12 +20,17 @@ class RecordsController extends \BaseController
      * @var StreamInterface
      */
     private $stream;
+    /**
+     * @var UploadAttachmentForm
+     */
+    private $attachmentForm;
 
-    public function __construct(RecordInterface $record, CategoryInterface $category, StreamInterface $stream)
+    public function __construct(RecordInterface $record, CategoryInterface $category, StreamInterface $stream, UploadAttachmentForm $attachmentForm)
     {
         $this->record = $record;
         $this->category = $category;
         $this->stream = $stream;
+        $this->attachmentForm = $attachmentForm;
     }
 
     public function showIncome()
@@ -41,7 +46,7 @@ class RecordsController extends \BaseController
         $recordTypeTitle = 'Income';
 
         return View::make('records.listRecords')
-            ->with(compact('records', 'categories', 'streams', 'type', 'recordTypeTitle'));
+                   ->with(compact('records', 'categories', 'streams', 'type', 'recordTypeTitle'));
     }
 
     public function showExpenses()
@@ -57,7 +62,7 @@ class RecordsController extends \BaseController
         $recordTypeTitle = 'Expenses';
 
         return View::make('records.listRecords')
-            ->with(compact('records', 'categories', 'streams', 'type', 'recordTypeTitle'));
+                   ->with(compact('records', 'categories', 'streams', 'type', 'recordTypeTitle'));
     }
 
     /**
@@ -87,7 +92,6 @@ class RecordsController extends \BaseController
         return Redirect::back()->withInput()->withErrors($record->getErrors());
     }
 
-
     /**
      * Update the specified resource in storage.
      * POST /records/{id}
@@ -115,7 +119,6 @@ class RecordsController extends \BaseController
         return Redirect::back()->withInput()->withErrors($record->getErrors());
     }
 
-
     /**
      * Remove the specified resource from storage.
      * POST /records/{id}/attachment
@@ -123,43 +126,17 @@ class RecordsController extends \BaseController
      * @param  int $id
      * @return Response
      */
-    public function attach($id)
+    public function attach($recordId)
     {
-        // Get the file
-        $file = Input::file('file');
 
-        // Get extension
-        $ext = '.' . $file->getClientOriginalExtension();
+        // Find the record
+        $record = $this->record->find($recordId);
 
-        // Create the filename
-        $filename = basename($file->getClientOriginalName(), $ext) . '_' . sha1(time()) . $ext;
-
-        // Clean whitespace in filename
-        $filename = preg_replace('/\s+/', '_', $filename);
-
-        // Get upload directory
-        $directory = Config::get('bk.upload_dir');
-
-        try {
-            // Move the file
-            $newFile = $file->move($directory, $filename);
-        } catch(Exception $e) {
-            Session::flash('error', $e->getMessage());
-            return Redirect::back();
+        if ( ! $record) {
+            return Redirect::back()->withErrors(['record', 'Record not found with ID' . $recordId]);
         }
 
-        $record = $this->record->find($id);
-
-        if( ! $record) {
-            return Redirect::back()->with('error', 'Record does not exist');
-        }
-
-        $attachment = new Attachment([
-            'filepath' => $newFile->getPathName(),
-            'record_id' => $record->id
-        ]);
-
-        if( $attachment->save() ) {
+        if ($this->attachmentForm->attach($record, Input::all())) {
 
             if (Request::ajax()) {
                 $categories = $this->category->getDropdownArray('expense');
@@ -168,11 +145,12 @@ class RecordsController extends \BaseController
 
                 return Response::json(['success' => true, 'payload' => $renderedRow]);
             }
+
             Session::flash('success', 'Attachment added successfully!');
+
             return Redirect::route($record->type . '.index');
         }
 
-        return Redirect::back()->withInput()->withErrors($attachment->getErrors());
-
+        return Redirect::back()->withInput()->withErrors($this->attachmentForm->errors());
     }
 }

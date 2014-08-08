@@ -24,8 +24,19 @@
 
 .has-attachment {
     color: @link-color;
+    position: relative;
     &:hover,
     &:focus {
         color: @link-hover-color;
+        text-decoration: none;
     }
+}
+
+.attachment-thumb {
+    display: none;
+    position: absolute;
+    right: 25px;
+    top: 25px;
+    border: 5px @link-color solid;
+    z-index: 10;
 }

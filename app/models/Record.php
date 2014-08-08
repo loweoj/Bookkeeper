@@ -48,6 +48,11 @@ class Record extends BaseModel
         return $this->hasOne('Attachment');
     }
 
+    public function hasAttachment()
+    {
+        return (bool) $this->attachment;
+    }
+
     /**
      * @return string
      */
