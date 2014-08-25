@@ -135,7 +135,6 @@ return [
 
 
         // Packages
-        'Intervention\Image\ImageServiceProvider',
         'Way\Generators\GeneratorsServiceProvider',
         'McCool\LaravelAutoPresenter\LaravelAutoPresenterServiceProvider',
         'Barryvdh\Debugbar\ServiceProvider',
@@ -208,7 +207,7 @@ return [
         'View'              => 'Illuminate\Support\Facades\View',
         'Carbon'            => 'Carbon\Carbon',
         'Debugbar'          => 'Barryvdh\Debugbar\Facade',
-        'Image'             => 'Intervention\Image\Facades\Image'
+        // 'Image'             => 'Intervention\Image\Facades\Image'
     ],
 
 ];
