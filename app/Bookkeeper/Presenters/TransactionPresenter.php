@@ -14,7 +14,7 @@ class TransactionPresenter extends BasePresenter
 
     public function amount()
     {
-        // return number_format($this->resource->amount, 2, '.', '');
+        return number_format($this->resource->amount, 2, '.', '');
     }
 
 
