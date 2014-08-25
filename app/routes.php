@@ -11,6 +11,15 @@
 |
 */
 
+
+Route::get('/', function(){
+    Queue::push(function($job)
+    {
+        Log::info('Queud!');
+        $job->delete();
+    });
+});
+
 /**
  * Transactions List
  */
@@ -24,8 +33,13 @@ Route::post('statements/import', ['uses' => 'StatementsController@import', 'as' 
 
 
 /**
+ * Package Export Handler
+ */
+Route::post('export', ['uses' => 'ExportController@export', 'as' => 'export']);
+
+
+/**
  * Records
- *
  * The routes to manage income and expenses
  */
 Route::get('income', ['uses' => 'RecordsController@showIncome', 'as' => 'income.index']);
