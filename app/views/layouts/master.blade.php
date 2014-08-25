@@ -11,11 +11,14 @@
     <header class="site-header">
         <div class="container">
             <h1 class="site-logo">Bookkeeper</h1>
-            <ul class="site-nav">
+            <ul class="site-nav  primary-nav">
                 <li><a href="/income" class="{{ Request::is( 'income') ? 'active' : '' }}">Income</a></li>
                 <li><a href="/expenses" class="{{ Request::is( 'expenses') ? 'active' : '' }}">Expenses</a></li>
                 <li><a href="/transactions" class="{{ Request::is( 'transactions') ? 'active' : '' }}">Transactions</a></li>
-                <li class="last">
+            </ul>
+            <ul class="site-nav  secondary-nav">
+                <li><a href="/export" class="{{ Request::is( 'export') ? 'active' : '' }}">Export Package</a></li>
+                <li>
                     <a href="/settings" class="dropdown-toggle  {{ Request::is( 'settings') ? 'active' : '' }}" data-toggle="dropdown"><i class="glyphicon-cog"></i> Settings</a>
                     <ul class="dropdown-menu  dropdown-menu-right" role="menu">
                         <li><a href="/settings/categories/" class="">Categories</a></li>
@@ -23,6 +26,7 @@
                     </ul>
                 </li>
             </ul>
+
         </div>
     </header>
 

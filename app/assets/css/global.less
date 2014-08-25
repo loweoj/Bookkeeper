@@ -48,6 +48,8 @@ body {
 }
 
 .site-nav {
+    .clearfix();
+    float: left;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -73,11 +75,11 @@ body {
                 color: @blue-light;
             }
         }
-
-      &.last {
-          float: right;
-      }
     }
+}
+
+.site-nav.secondary-nav {
+    float: right;
 }
 
 
