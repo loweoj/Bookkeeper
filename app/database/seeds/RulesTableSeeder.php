@@ -1,7 +1,6 @@
 <?php
 
-class RulesTableSeeder extends Seeder
-{
+class RulesTableSeeder extends Seeder {
 
     protected $split = [
         [
@@ -27,13 +26,13 @@ class RulesTableSeeder extends Seeder
     protected $conditions = [
         [
             'field' => 'payee',
-            'match'  => 'contains',
-            'value'  => 'Lul Ticket Machine'
+            'match' => 'contains',
+            'value' => 'Lul Ticket Machine'
         ],
         [
             'field' => 'payee',
-            'match'  => 'contains',
-            'value'  => 'O2'
+            'match' => 'contains',
+            'value' => 'O2'
         ]
     ];
 
@@ -48,62 +47,64 @@ class RulesTableSeeder extends Seeder
     {
         return [
             [
-                'title'         => 'Split TFL',
-                'conditionJson' => json_encode([
-                    'field' => 'payee',
-                    'match'  => 'contains',
-                    'value'  => 'Lul Ticket Machine'
+                'title'          => 'Split TFL',
+                'conditionJson'  => json_encode([
+                    [
+                        'field' => 'payee',
+                        'match' => 'contains',
+                        'value' => 'Lul Ticket Machine'
+                    ]
                 ]),
-                'conditionType' => 'any',
-                'to_payee'      => 'TFL',
-                'to_category'   => '',
-                'to_stream'     => '',
+                'conditionType'  => 'any',
+                'to_payee'       => 'TFL',
+                'to_category'    => '',
+                'to_stream'      => '',
                 'to_description' => '',
                 'splitJson'      => json_encode($this->split),
             ],
             [
-                'title'         => 'Match TESCO',
-                'conditionJson' => json_encode([
+                'title'          => 'Match TESCO',
+                'conditionJson'  => json_encode([
                     [
                         'field' => 'payee',
-                        'match'  => 'contains',
-                        'value'  => 'TESCO'
+                        'match' => 'contains',
+                        'value' => 'TESCO'
                     ]
                 ]),
-                'conditionType' => 'any',
-                'to_payee'      => 'Tesco Food - CHANGED BY TEST RULE',
+                'conditionType'  => 'any',
+                'to_payee'       => 'Tesco Food - CHANGED BY TEST RULE',
                 'to_category'    => '',
                 'to_stream'      => '',
                 'to_description' => '',
                 'splitJson'      => '',
             ],
             [
-                'title'         => 'Match O2',
-                'conditionJson' => json_encode([
+                'title'          => 'Match O2',
+                'conditionJson'  => json_encode([
                     [
                         'field' => 'payee',
-                        'match'  => 'contains',
-                        'value'  => 'O2'
+                        'match' => 'contains',
+                        'value' => 'O2'
                     ]
                 ]),
-                'conditionType' => 'any',
-                'to_payee'      => 'O2 Mobile - CHANGED BY TEST RULE',
+                'conditionType'  => 'any',
+                'to_payee'       => 'O2 Mobile - CHANGED BY TEST RULE',
                 'to_category'    => '',
                 'to_stream'      => '',
                 'to_description' => '',
                 'splitJson'      => '',
             ],
             [
-                'title'         => 'Match SINFONIETTA',
-                'conditionJson' => json_encode([
+                'title'          => 'Match SINFONIETTA',
+                'conditionJson'  => json_encode([
                     [
                         'field' => 'payee',
-                        'match'  => 'contains',
-                        'value'  => 'SINFONIETTA'
+                        'match' => 'contains',
+                        'value' => 'SINFONIETTA'
                     ]
                 ]),
-                'conditionType' => 'any',
-                'to_payee'      => 'London Sinfonietta - CHANGED BY TEST RULE',
+                'conditionType'  => 'any',
+                'to_payee'       => 'London Sinfonietta - CHANGED BY TEST RULE',
                 'to_category'    => '',
                 'to_stream'      => '',
                 'to_description' => '',
