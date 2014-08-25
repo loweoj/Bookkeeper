@@ -2,4 +2,9 @@
 
 class ExportService {
 
+    public function fire($job, $data)
+    {
+
+    }
+
 } 

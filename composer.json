@@ -9,7 +9,9 @@
 		"asgrim/ofxparser": "dev-master",
         "mccool/laravel-auto-presenter": "2.*",
 		"rtablada/package-installer": "dev-master",
-		"barryvdh/laravel-debugbar": "1.*"
+		"barryvdh/laravel-debugbar": "1.*",
+		"maatwebsite/excel": "1.*",
+		"pda/pheanstalk": "2.*"
 	},
 
 	"require-dev": {
