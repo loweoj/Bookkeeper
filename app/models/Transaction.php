@@ -56,7 +56,7 @@ class Transaction extends Eloquent implements PresenterInterface {
      */
     public function statement()
     {
-        return $this->hasOne('Statement');
+        return $this->belongsTo('Statement');
     }
 
     /**

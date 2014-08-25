@@ -5,7 +5,7 @@ use Bookkeeper\Repo\Attachment\EloquentAttachment;
 use Bookkeeper\Repo\Category\EloquentCategory;
 use Bookkeeper\Repo\Record\EloquentRecord;
 use Bookkeeper\Repo\Rule\EloquentRule;
-use Bookkeeper\Repo\Statements\EloquentStatement;
+use Bookkeeper\Repo\Statement\EloquentStatement;
 use Bookkeeper\Repo\Stream\EloquentStream;
 use Bookkeeper\Repo\Transaction\EloquentTransaction;
 use Category;

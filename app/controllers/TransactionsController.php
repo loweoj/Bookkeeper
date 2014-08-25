@@ -1,6 +1,18 @@
 <?php
 
+use Bookkeeper\Repo\Transaction\TransactionInterface;
+
 class TransactionsController extends \BaseController {
+
+    /**
+     * @var TransactionInterface
+     */
+    private $transaction;
+
+    public function __construct(TransactionInterface $transaction)
+    {
+        $this->transaction = $transaction;
+    }
 
 	/**
 	 * Display a listing of the resource.
@@ -15,7 +27,7 @@ class TransactionsController extends \BaseController {
 	        3 => 'Category Three'
 	    ];
 
-        $transactions = Transaction::all();
+        $transactions = $this->transaction->all();
 
 	    return View::make('transactions.list')
 	        ->with('transactions', $transactions)

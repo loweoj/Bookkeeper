@@ -17,5 +17,10 @@ class TransformerServiceProvider extends ServiceProvider {
         {
             return new PercentageCalculator();
         });
+
+        /**
+         * TEMP Transformer Interface
+         */
+        $app->bind('Bookkeeper\Transformer\TransactionTransformerInterface', 'Bookkeeper\Transformer\OfxTransactionTransformer');
     }
 }

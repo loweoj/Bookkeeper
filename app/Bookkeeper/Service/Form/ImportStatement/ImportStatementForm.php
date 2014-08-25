@@ -1,14 +1,11 @@
 <?php  namespace Bookkeeper\Service\Form\ImportStatement;
 
-use Bookkeeper\Repo\Statements\StatementInterface;
+use Bookkeeper\Repo\Statement\StatementInterface;
 use Bookkeeper\Service\Form\AbstractValidableForm;
 use Bookkeeper\Service\Validation\ValidableInterface;
-use Bookkeeper\Transformer\OfxTransactionTransformer;
 use Bookkeeper\Transformer\TransactionTransformerInterface;
-use \Exception;
-use \Response;
-use Illuminate\Database\Eloquent\Model;
 use OfxParser\Parser;
+use Response;
 
 class ImportStatementForm extends AbstractValidableForm {
 
@@ -32,11 +29,6 @@ class ImportStatementForm extends AbstractValidableForm {
      */
     private $transactionTransformer;
 
-    /**
-     * @var StatementParserInterface
-     */
-//    private $statementParser;
-
     public function __construct(TransactionTransformerInterface $transformer, Parser $ofxParser, ValidableInterface $validator, StatementInterface $statement)
     {
         $this->validator = $validator;
@@ -49,7 +41,7 @@ class ImportStatementForm extends AbstractValidableForm {
     public function import($input)
     {
         // valid() adds validation error message.
-        if( ! $this->valid($input) ) {
+        if ( ! $this->valid($input)) {
             return false;
         }
 
@@ -57,35 +49,33 @@ class ImportStatementForm extends AbstractValidableForm {
         // parse the file and get transactions
 
 //        try {
-            // Parse file
-            $ofx = $this->ofxParser->loadFromFile($input['file']->getRealPath());
+        // Parse file
+        $ofx = $this->ofxParser->loadFromFile($input['file']->getRealPath());
 
-            // Run rules
-            $transactions = $ofx->BankAccount->Statement->transactions;
+        // Run rules
+        $transactions = $ofx->BankAccount->Statement->transactions;
 
-            $transactions = $this->transactionTransformer->transform($transactions);
+        $transactions = $this->transactionTransformer->transform($transactions);
 
-            $this->transactions = $transactions;
-
-        dd($transactions);
+        $this->transactions = $transactions;
 
 //        } catch (Exception $e) {
 //            $this->errors()->add('data', 'There was an error importing your data: ' . $e->getMessage());
 //            dd($e);
 //            return false;
 //        }
-        /*
 
-        $this->statement->create([
-            'start_date' => $ofx->BankAccount->Statement->startDate,
-            'end_date' => $ofx->BankAccount->Statement->endDate,
+        $statement = $this->statement->create([
+            'start_date'   => $ofx->BankAccount->Statement->startDate,
+            'end_date'     => $ofx->BankAccount->Statement->endDate,
             'transactions' => $transactions
         ]);
 
-        return Response::json('success', 200);
-        */
+        if ($statement) {
+            return Response::json('success', 200);
+        }
 
-
+        return Response::json('error', 200);
     }
 
     public function getTransactions()

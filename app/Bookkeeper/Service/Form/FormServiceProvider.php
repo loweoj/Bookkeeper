@@ -18,11 +18,6 @@ class FormServiceProvider extends ServiceProvider {
         $app = $this->app;
 
         /**
-         * TEMP Transformer Interface
-         */
-        $app->bind('Bookkeeper\Transformer\TransactionTransformerInterface', 'Bookkeeper\Transformer\OfxTransactionTransformer');
-
-        /**
          * Import Statement Form
          */
         $app->bind('Bookkeeper\Service\Form\ImportStatement\ImportStatementForm', function ($app) {
