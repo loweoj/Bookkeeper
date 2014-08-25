@@ -43,6 +43,8 @@ class RuleManager {
             {
                 $transaction = $this->resultManager->runResults($transaction, $rule);
                 if(gettype($transaction) == 'array') {
+                    // Stop running rules if we have a split
+                    // break;
                     dd($transaction);
                 }
             }

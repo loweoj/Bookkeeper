@@ -39,14 +39,12 @@ class RuleConditionManager {
     {
         $conditionResultsArray = [];
         foreach ($dbRule->conditions as $dbCondition) {
-            $condition = $this->conditionFactory->make($dbCondition->match);
 
-//            if( gettype($transaction) !== 'object' ) {
-//                dd($transaction);
-//            }
-//            if( gettype($dbCondition) !== 'object' ) {
-//                dd($dbCondition);
-//            }
+            if( gettype($dbCondition) !== 'object' ) {
+                throw new \InvalidArgumentException('Condition should be of type object, ' . gettype($dbCondition) . ' given');
+            }
+
+            $condition = $this->conditionFactory->make($dbCondition->match);
 
             $conditionResultsArray[] = $condition->test($transaction->{$dbCondition->field}, $dbCondition->value);
         }

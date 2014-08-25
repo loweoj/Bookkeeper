@@ -15,29 +15,36 @@ class SplitManager
         $this->calculator = $calculator;
     }
 
+    /**
+     * @param       $transaction
+     * @param array $splitObjects  Array of objects to give each of the new "split" transactions (from splitJson)
+     * @return array
+     */
     public function splitTransaction($transaction, array $splitObjects)
     {
+        // Prepare the return array
         $transactions = [];
 
-//        if( isset($transaction->splits) )
-//        {
-//
-//        }
-
-        // Start a new percentage calculation
+        // Start a new percentage calculation and pass the total
+        // amount and the total number of splits to expect
         if (isset($transaction->amount)) {
             $this->calculator->newCalculation($transaction->amount, count($splitObjects));
         }
 
         foreach ($splitObjects as $split) {
+            // Clone the original transaction ready for modification
             $clone = clone $transaction;
+
             // Spin through and change the values on this clone
             $clone = $this->fillClone($transaction, $split, $clone);
+
+            // Add the modified clone to the return array
             $transactions[] = $clone;
+
+            // Remove the clone variable
             unset($clone);
         }
 
-        // $transaction->splits = $transactions;
         return $transactions;
     }
 
@@ -50,13 +57,14 @@ class SplitManager
     {
         foreach ($split as $key => $val) {
 
+            // Calculate the percentage if required
             if ($key == 'percentage') {
                 $amount = $this->calculator->calculate($transaction->amount, $val);
                 $clone->amount = $amount;
                 continue;
             }
 
-            // Set the value on clone
+            // Set the split's values on the clone
             $clone->$key = $val;
         }
 
