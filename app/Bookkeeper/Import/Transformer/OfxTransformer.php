@@ -5,10 +5,9 @@ use Str;
 class OfxTransformer implements ImportTransformerInterface {
 
     /**
-     * Create a unified array from the parsed data
-     *
-     * @param $data
-     * @return mixed
+     * @param      $data
+     * @param null $map
+     * @return array|mixed
      */
     public function transform($data, $map = null)
     {
@@ -46,8 +45,8 @@ class OfxTransformer implements ImportTransformerInterface {
             $accountNumber = str_replace($sortCode, '', $accountNumber);
         }
         return [
-            'account_number' => (string) $accountNumber,
-            'sort_code'      => $sortCode
+            'account-number' => (string) $accountNumber,
+            'sort-code'      => $sortCode
         ];
     }
 

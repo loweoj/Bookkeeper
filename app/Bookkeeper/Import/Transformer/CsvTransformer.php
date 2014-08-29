@@ -1,14 +1,14 @@
 <?php  namespace Bookkeeper\Import\Transformer;
 
-class OfxTransformer implements ImportTransformerInterface {
+class CsvTransformer implements ImportTransformerInterface {
 
     /**
-     * Transform data into managable data for rule manager
+     * Create a unified array from the parsed data
      *
      * @param $data
      * @return mixed
      */
-    public function transform($data)
+    public function transform($data, $map = null)
     {
         // TODO: Implement transform() method.
     }
