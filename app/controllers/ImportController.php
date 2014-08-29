@@ -2,13 +2,30 @@
 
 use Bookkeeper\Import\Translator\ImportTranslator;
 use Bookkeeper\Service\Form\ImportStatement\ImportStatementForm;
+use Bookkeeper\Transformer\Rules\RuleManager;
 
 class ImportController extends \BaseController {
 
-    public function __construct(ImportStatementForm $importForm, ImportTranslator $translator)
+    /**
+     * @var ImportStatementForm
+     */
+    private $importForm;
+
+    /**
+     * @var ImportTranslator
+     */
+    private $translator;
+
+    /**
+     * @var RuleManager
+     */
+    private $ruleManager;
+
+    public function __construct(ImportStatementForm $importForm, ImportTranslator $translator, RuleManager $ruleManager)
     {
         $this->importForm = $importForm;
         $this->translator = $translator;
+        $this->ruleManager = $ruleManager;
     }
 
     /**
@@ -32,8 +49,6 @@ class ImportController extends \BaseController {
             // Parse the file
             $parsedData = $this->translator->parseInputFile($file);
 
-            dd($parsedData);
-
             // If the current file is CSV, we need to display the mappings
             // form so that we can transform the parsed data properly.
             if ($this->translator->getCurrentExtension() == 'csv') {
@@ -41,47 +56,28 @@ class ImportController extends \BaseController {
             }
 
             $csvMap = null;
-            $bankAccounts = $this->translator->makeAccountsArray($data, $csvMap);
+            $bankAccounts = $this->translator->makeAccountsArray($parsedData, $csvMap);
 
-            /*
-            TransformedData
-                $bankAccounts = array(
-                    array(
-                        'account-number' => '',
-                        'account-sort-code' => '',
-                        'transactions'  => array(
-                            'date'        => $ofxTransaction->date->format('Y-m-d H:i:s'),
-                            'payee'       => $ofxTransaction->name,
-                            'amount'      => $ofxTransaction->amount,
-                            'type'        => $ofxTransaction->type,
-                            'description' => $ofxTransaction->memo
-                        )
-                    )
-                )
+            
+            $bankRepo = App::make('Bookkeeper\Repo\BankAccount\BankAccountInterface');
+            $recordRepo = App::make('Bookkeeper\Repo\Record\RecordInterface');
 
-                foreach($bankAccounts as $account)
-                {
+            foreach($bankAccounts as $i => $account)  {
+                if( $bankAccount = $bankRepo->findOrCreateWithTransactions($account) ) {
+                    // Make draft records
                     $draftRecords = $this->ruleManager->run($account['transactions']);
+                    // create draft records!
+                    // $recordRepo->createDraftRecordsForAccount($draftRecords, $bankAccount->id);
+                } else {
+                    // Do some error messaging?!
 
+                    break;
                 }
+            }
 
-             */
-
-
-
-
-
-            // Create / Find Bank Account
-            /**
-             * Get Bank Account information from transactions
-             * Find/Create bank account for each transaction.
-             */
-
-            $transactions = $this->importForm->getTransactions();
-
-            return View::make('transactions.list')
-                       ->with('transactions', $transactions)
-                       ->with('categories', $categories);
+//            return View::make('transactions.list')
+//                       ->with('transactions', $draftRecords)
+//                       ->with('categories', $categories);
         }
 
         return Redirect::route('transactions.index')
