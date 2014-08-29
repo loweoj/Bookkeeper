@@ -49,6 +49,12 @@ class EloquentRecord implements RecordInterface
         return $this->record->find($id);
     }
 
+    public function getDrafts()
+    {
+        $this->withStatus = 'draft';
+        return $this->all();
+    }
+
     /**
      * @return $this
      */
@@ -123,6 +129,13 @@ class EloquentRecord implements RecordInterface
      */
     public function all()
     {
+        // Find for a specific status, or get approved
+        if( isset($this->withStatus)) {
+            $this->query->whereStatus($this->withStatus);
+        } else {
+            $this->query->whereStatus('approved');
+        }
+
         $results = $this->query
             ->with('category', 'stream', 'attachment')
             ->orderBy('date', 'desc')
