@@ -3,11 +3,12 @@
 interface ImportTransformerInterface {
 
     /**
-     * Transform data into managable data for rule manager
+     * Create a unified array from the parsed data
      *
-     * @param $data
+     * @param      $data
+     * @param null $map     Data map
      * @return mixed
      */
-    public function transform($data);
+    public function transform($data, $map = null);
 
 } 

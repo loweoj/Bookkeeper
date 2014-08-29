@@ -56,11 +56,14 @@ class ImportTranslator {
         return \App::make($namespace . 'OfxParser');
     }
 
+    /**
+     * @return mixed
+     */
     protected function fetchTransformer()
     {
         $namespace = 'Bookkeeper\\Import\\Transformer\\';
 
-        if ($extension == 'csv') {
+        if ($this->extension == 'csv') {
             return \App::make($namespace .'CsvTransformer');
         }
         return \App::make($namespace . 'OfxTransformer');

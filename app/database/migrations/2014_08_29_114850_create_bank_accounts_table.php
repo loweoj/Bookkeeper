@@ -17,7 +17,7 @@ class CreateBankAccountsTable extends Migration {
 			$table->increments('id');
 			$table->string('name');
 			$table->string('description')->nullable();
-			$table->integer('account_number');
+			$table->string('account_number');
 			$table->string('sort_code');
             $table->enum('default', ['0', '1']);
 			$table->timestamps();
