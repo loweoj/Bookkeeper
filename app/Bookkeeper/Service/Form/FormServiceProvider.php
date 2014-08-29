@@ -22,10 +22,7 @@ class FormServiceProvider extends ServiceProvider {
          */
         $app->bind('Bookkeeper\Service\Form\ImportStatement\ImportStatementForm', function ($app) {
             return new ImportStatementForm(
-                $app->make('Bookkeeper\Transformer\TransactionTransformerInterface'),
-                new \OfxParser\Parser(),
-                new ImportStatementLaravelValidator($app['validator']),
-                $app->make('Bookkeeper\Repo\Statement\StatementInterface')
+                new ImportStatementLaravelValidator($app['validator'])
             );
         });
 
