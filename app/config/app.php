@@ -125,7 +125,7 @@ return [
         'Illuminate\Workbench\WorkbenchServiceProvider',
 
         // Custom Extensions
-        'Bookkeeper\Extensions\FilesystemServiceProvider',
+        'Bookkeeper\Extensions\ExtensionServiceProvider',
 
         // Bookkeeper
         'Bookkeeper\Repo\RepoServiceProvider',
