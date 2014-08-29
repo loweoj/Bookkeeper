@@ -1,7 +1,6 @@
 <?php  namespace Bookkeeper\Transformer\Rules;
 
 use Bookkeeper\Transformer\Conditions\ConditionFactory;
-use Illuminate\Database\Eloquent\Model;
 
 class RuleConditionManager {
 
@@ -46,7 +45,7 @@ class RuleConditionManager {
         foreach ($dbRule['conditions'] as $dbCondition) {
 
             // NB. dbCondition is a json_decoded stdClass
-            if( gettype($dbCondition) !== 'object' ) {
+            if (gettype($dbCondition) !== 'object') {
                 throw new \InvalidArgumentException('Condition should be of type object, ' . gettype($dbCondition) . ' given');
             }
 
@@ -54,8 +53,9 @@ class RuleConditionManager {
             $condition = $this->conditionFactory->make($dbCondition->match);
 
             // Test the condition
-            $conditionResultsArray[] = $condition->test($transaction[$dbCondition->field], $dbCondition->value);
+            $conditionResultsArray[] = $condition->test(strtoupper($transaction[$dbCondition->field]), strtoupper($dbCondition->value));
         }
+
         return $conditionResultsArray;
     }
 
@@ -67,7 +67,7 @@ class RuleConditionManager {
      */
     protected function anyConditions(array $conditionResultsArray)
     {
-        return array_search(true, $conditionResultsArray) == true;
+        return array_search(true, $conditionResultsArray) !== false;
     }
 
     /**

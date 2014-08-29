@@ -1,7 +1,6 @@
 <?php  namespace Bookkeeper\Transformer\Rules;
 
 use Bookkeeper\Repo\Rule\RuleInterface;
-use DebugBar\DebugBar;
 use Illuminate\Database\Eloquent\Model;
 
 class RuleManager {
@@ -16,14 +15,38 @@ class RuleManager {
      */
     private $resultManager;
 
-    public function __construct(RuleInterface $rulesRepo,  RuleConditionManager $conditionManager, RuleResultManager $resultManager)
+    public function __construct(RuleInterface $rulesRepo, RuleConditionManager $conditionManager, RuleResultManager $resultManager)
     {
         $this->rulesRepo = $rulesRepo;
         $this->conditionManager = $conditionManager;
         $this->resultManager = $resultManager;
 
         // Fetch DB Rules
-        $this->rules = $this->rulesRepo->all();
+        $this->rules = $this->rulesRepo->allAsArray();
+    }
+
+    /**
+     * Run rules on multiple transactions
+     *
+     * @param $transactions
+     * @return array
+     */
+    public function run($transactions)
+    {
+        $return = [];
+        foreach ($transactions as $transaction) {
+            $result = $this->runSingle($transaction);
+            // If the array has been split (is multidimensional)
+            // then we merge it onto the current return array.
+            if (isset($result[0]) && is_array($result[0])) {
+                $return = array_merge($return, $result);
+                continue;
+            }
+            // Otherwise we just add the transaction as a new key.
+            $return[] = $result;
+        }
+
+        return $return;
     }
 
     /**
@@ -33,28 +56,23 @@ class RuleManager {
      * @return array|Model
      * @throws \Exception
      */
-    public function run($transaction)
+    public function runSingle($transaction)
     {
-        foreach( $this->rules as $rule )
-        {
-            if( gettype($rule) !== 'array' && $rule instanceof Model) {
+        foreach ($this->rules as $rule) {
+            // Check we are handling an array rule here!
+            if (gettype($rule) !== 'array' && $rule instanceof Model) {
                 $rule = $rule->toArray();
             }
 
-            // could cause issues running a rule on an array in future rules...?
-            // $transaction is an array when it returns from runResults
-            if ( $this->conditionManager->runConditions($transaction, $rule) )
-            {
+            if ($this->conditionManager->runConditions($transaction, $rule)) {
                 $transaction = $this->resultManager->runResults($transaction, $rule);
-                if(gettype($transaction) == 'array') {
-                    // Stop running rules if we have a split
-                    // break;
-                    dd($transaction);
+                // Stop running rules if we have a split
+                if (isset($transaction[0]) && is_array($transaction[0])) {
+                    break;
                 }
             }
         }
 
         return $transaction;
     }
-
-} 
+}

@@ -37,7 +37,8 @@ class RuleResultManager {
         // create split transaction
         if($rule['splitJson'] != '')
         {
-            return $this->splitManager->splitTransaction($transaction, $rule['splitJson']);
+            $transaction = $this->splitManager->splitTransaction($transaction, $rule['splitJson']);
+            // return array_merge($splitTransactions, $transaction);
         }
 
         return $transaction;
