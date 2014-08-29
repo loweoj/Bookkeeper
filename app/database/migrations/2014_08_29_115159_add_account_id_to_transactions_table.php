@@ -14,7 +14,7 @@ class AddAccountIdToTransactionsTable extends Migration {
 	{
 		Schema::table('transactions', function(Blueprint $table)
 		{
-            $table->integer('account_id')->unsigned()->after('reconciled');
+            $table->integer('account_id')->nullable()->unsigned()->after('reconciled');
             $table->foreign('account_id')->references('id')->on('bank_accounts');
         });
 	}
