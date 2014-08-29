@@ -8,4 +8,10 @@ interface RuleInterface {
      */
     public function all();
 
+    /**
+     * Return all resources as arrays
+     * @return mixed
+     */
+    public function allAsArray();
+
 }
