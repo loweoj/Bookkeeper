@@ -130,9 +130,9 @@ return [
         // Bookkeeper
         'Bookkeeper\Repo\RepoServiceProvider',
         'Bookkeeper\Image\ImageServiceProvider',
+        'Bookkeeper\Rules\RulesServiceProvider',
         'Bookkeeper\Import\ImportServiceProvider',
         'Bookkeeper\Service\Form\FormServiceProvider',
-        'Bookkeeper\Transformer\TransformerServiceProvider',
 
         // Packages
         'Way\Generators\GeneratorsServiceProvider',

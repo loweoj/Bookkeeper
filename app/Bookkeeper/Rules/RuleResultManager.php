@@ -1,7 +1,6 @@
-<?php  namespace Bookkeeper\Transformer\Rules;
+<?php  namespace Bookkeeper\Rules;
 
-use Bookkeeper\Transformer\Split\SplitManager;
-use Illuminate\Database\Eloquent\Model;
+use Bookkeeper\Rules\Split\SplitManager;
 
 class RuleResultManager {
 

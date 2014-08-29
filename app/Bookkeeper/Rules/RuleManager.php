@@ -1,4 +1,4 @@
-<?php  namespace Bookkeeper\Transformer\Rules;
+<?php  namespace Bookkeeper\Rules;
 
 use Bookkeeper\Repo\Rule\RuleInterface;
 use Illuminate\Database\Eloquent\Model;

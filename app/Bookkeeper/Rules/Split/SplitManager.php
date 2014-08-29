@@ -1,6 +1,6 @@
-<?php  namespace Bookkeeper\Transformer\Split;
+<?php  namespace Bookkeeper\Rules\Split;
 
-use Bookkeeper\Transformer\Split\Calculator\CalculatorInterface;
+use Bookkeeper\Rules\Split\Calculator\CalculatorInterface;
 
 class SplitManager
 {

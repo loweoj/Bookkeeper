@@ -1,4 +1,4 @@
-<?php  namespace Bookkeeper\Transformer\Conditions;
+<?php  namespace Bookkeeper\Rules\Conditions;
 
 class EqualsCondition implements RuleConditionInterface {
 

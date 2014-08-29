@@ -1,6 +1,4 @@
-<?php
-
-namespace Bookkeeper\Transformer\Split\Calculator;
+<?php namespace Bookkeeper\Rules\Split\Calculator;
 
 interface CalculatorInterface {
 

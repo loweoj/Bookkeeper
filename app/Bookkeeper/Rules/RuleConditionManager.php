@@ -1,6 +1,6 @@
-<?php  namespace Bookkeeper\Transformer\Rules;
+<?php  namespace Bookkeeper\Rules;
 
-use Bookkeeper\Transformer\Conditions\ConditionFactory;
+use Bookkeeper\Rules\Conditions\ConditionFactory;
 
 class RuleConditionManager {
 

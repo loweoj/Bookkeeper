@@ -2,7 +2,7 @@
 
 use Bookkeeper\Import\Translator\ImportTranslator;
 use Bookkeeper\Service\Form\ImportStatement\ImportStatementForm;
-use Bookkeeper\Transformer\Rules\RuleManager;
+use Bookkeeper\Rules\RuleManager;
 
 class ImportController extends \BaseController {
 
@@ -58,7 +58,7 @@ class ImportController extends \BaseController {
             $csvMap = null;
             $bankAccounts = $this->translator->makeAccountsArray($parsedData, $csvMap);
 
-            
+
             $bankRepo = App::make('Bookkeeper\Repo\BankAccount\BankAccountInterface');
             $recordRepo = App::make('Bookkeeper\Repo\Record\RecordInterface');
 
