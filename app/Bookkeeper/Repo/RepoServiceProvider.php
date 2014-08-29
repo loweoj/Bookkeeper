@@ -1,7 +1,9 @@
 <?php namespace Bookkeeper\Repo;
 
 use Attachment;
+use BankAccount;
 use Bookkeeper\Repo\Attachment\EloquentAttachment;
+use Bookkeeper\Repo\BankAccount\EloquentBankAccount;
 use Bookkeeper\Repo\Category\EloquentCategory;
 use Bookkeeper\Repo\Record\EloquentRecord;
 use Bookkeeper\Repo\Rule\EloquentRule;
@@ -13,6 +15,7 @@ use Illuminate\Support\ServiceProvider;
 use Record;
 use Rule;
 use Stream;
+use Statement;
 use Transaction;
 
 class RepoServiceProvider extends ServiceProvider
@@ -38,10 +41,18 @@ class RepoServiceProvider extends ServiceProvider
             return $record;
         });
 
+        // Bank Account
+        $app->bind('Bookkeeper\Repo\BankAccount\BankAccountInterface', function ($app) {
+            return new EloquentBankAccount(
+                new BankAccount,
+                $app->make('Bookkeeper\Repo\Transaction\TransactionInterface')
+            );
+        });
+
         // Statement
         $app->bind('Bookkeeper\Repo\Statement\StatementInterface', function ($app) {
             return new EloquentStatement(
-                new Stream,
+                new Statement,
                 $app->make('Bookkeeper\Repo\Transaction\TransactionInterface')
             );
         });
