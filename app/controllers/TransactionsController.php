@@ -1,5 +1,7 @@
 <?php
 
+use Bookkeeper\Repo\Category\CategoryInterface;
+use Bookkeeper\Repo\Record\RecordInterface;
 use Bookkeeper\Repo\Transaction\TransactionInterface;
 
 class TransactionsController extends \BaseController {
@@ -8,10 +10,16 @@ class TransactionsController extends \BaseController {
      * @var TransactionInterface
      */
     private $transaction;
+    /**
+     * @var CategoryInterface
+     */
+    private $category;
 
-    public function __construct(TransactionInterface $transaction)
+    public function __construct(TransactionInterface $transaction, RecordInterface $record, CategoryInterface $category)
     {
         $this->transaction = $transaction;
+        $this->record = $record;
+        $this->category = $category;
     }
 
 	/**
@@ -21,17 +29,17 @@ class TransactionsController extends \BaseController {
 	 */
 	public function index()
 	{
-        $categories = [
-	        1 => 'Category One',
-	        2 => 'Category Two',
-	        3 => 'Category Three'
-	    ];
+        // Get categories
+        $expenseCategories = $this->category->getDropdownArray('expense');
+        $incomeCategories = $this->category->getDropdownArray('income');
 
-        $transactions = $this->transaction->all();
+        // Get all draft transactions/records
+        $transactions = $this->record->getDrafts();
 
 	    return View::make('transactions.list')
 	        ->with('transactions', $transactions)
-	        ->with('categories', $categories);
+	        ->with('expenseCats', $expenseCategories)
+            ->with('incomeCats', $incomeCategories);
 	}
 
 
