@@ -23,7 +23,7 @@ class CreateRecordsTable extends Migration {
             $table->integer('transaction_id')->nullable()->unsigned();
             $table->integer('category_id')->unsigned();
             $table->integer('stream_id')->unsigned();
-            $table->enum('status', ['draft','accepted']);
+            $table->enum('status', ['approved','draft']);
             $table->softDeletes();
             $table->timestamps();
 			$table->foreign('transaction_id')->references('id')->on('transactions');

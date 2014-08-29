@@ -2,8 +2,7 @@
 
 use Faker\Factory as Faker;
 
-class RecordsTableSeeder extends Seeder
-{
+class RecordsTableSeeder extends Seeder {
 
     public function run()
     {
@@ -11,6 +10,7 @@ class RecordsTableSeeder extends Seeder
 
         $transaction_ids = Transaction::lists('id');
         $stream_ids = Stream::lists('id');
+        $account_ids = BankAccount::lists('id');
 
         foreach (range(1, 20) as $index) {
             $defaultFields = [
@@ -18,7 +18,8 @@ class RecordsTableSeeder extends Seeder
                 'payee'          => $faker->name,
                 'description'    => $faker->sentence(),
                 'transaction_id' => $faker->randomElement($transaction_ids),
-                'stream_id'      => $faker->randomElement($stream_ids)
+                'stream_id'      => $faker->randomElement($stream_ids),
+                'account_id'     => $faker->randomElement($account_ids)
             ];
 
             $typeSpecificFields = $this->chooseRandomRecordType($faker);

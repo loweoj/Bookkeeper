@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder {
         Stream::truncate();
         Category::truncate();
         Rule::truncate();
+        BankAccount::truncate();
         Statement::truncate();
         Transaction::truncate();
         Record::truncate();
@@ -25,6 +26,7 @@ class DatabaseSeeder extends Seeder {
         $this->call('StreamsTableSeeder');
         $this->call('CategoriesTableSeeder');
         $this->call('RulesTableSeeder');
+        $this->call('BankAccountsTableSeeder');
         $this->call('StatementsTableSeeder');
         $this->call('TransactionsTableSeeder');
         $this->call('RecordsTableSeeder');
