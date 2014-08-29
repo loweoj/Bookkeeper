@@ -22,6 +22,14 @@ class Rule extends BaseModel
      */
     protected $fillable = ['title', 'conditionJson', 'conditionType', 'to_payee', 'to_category', 'to_stream', 'to_description', 'splitJson'];
 
+    public function toArray()
+    {
+        $array = parent::toArray();
+        $array['conditions'] = $this->conditions;
+        $array['splitJson'] = $this->splitJson;
+        return $array;
+    }
+
     /**
      * @return mixed
      */

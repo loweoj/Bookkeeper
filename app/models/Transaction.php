@@ -2,7 +2,7 @@
 
 use McCool\LaravelAutoPresenter\PresenterInterface;
 
-class Transaction extends Eloquent implements PresenterInterface {
+class Transaction extends BaseModel implements PresenterInterface {
 
     /**
      * The database table used by the model.
@@ -14,7 +14,7 @@ class Transaction extends Eloquent implements PresenterInterface {
     /**
      * @var array
      */
-    protected $fillable = ['date', 'payee', 'description', 'amount', 'type', 'reconciled', 'statement_id'];
+    protected $fillable = ['date', 'payee', 'description', 'amount', 'type', 'reconciled', 'statement_id', 'account_id'];
 
     /**
      * @var array
@@ -28,6 +28,13 @@ class Transaction extends Eloquent implements PresenterInterface {
      */
     protected $softDelete = true;
 
+    protected static $create_rules = [
+        'date'        => 'required',
+        'payee'       => 'required',
+        'description' => 'required',
+        'amount'      => 'required'
+    ];
+
     /**
      * @var array
      */
@@ -36,7 +43,6 @@ class Transaction extends Eloquent implements PresenterInterface {
     public static function boot()
     {
         parent::boot();
-
         /*
         static::creating(function($post)
         {
@@ -52,11 +58,19 @@ class Transaction extends Eloquent implements PresenterInterface {
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function statement()
     {
         return $this->belongsTo('Statement');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function bankAccount()
+    {
+        return $this->belongsTo('BankAccount', 'account_id');
     }
 
     /**
