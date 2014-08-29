@@ -2,7 +2,7 @@
 
 use Illuminate\Support\ServiceProvider;
 
-class FilesystemServiceProvider extends ServiceProvider {
+class ExtensionServiceProvider extends ServiceProvider {
 
     /**
      * Register the service provider.
