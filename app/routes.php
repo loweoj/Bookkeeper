@@ -29,7 +29,7 @@ Route::get('transactions', ['uses' => 'TransactionsController@index', 'as' => 't
 /**
  * Statement Import Handler
  */
-Route::post('statements/import', ['uses' => 'StatementsController@import', 'as' => 'statements.import']);
+Route::post('import', ['uses' => 'ImportController@import', 'as' => 'import']);
 
 
 /**

@@ -32,7 +32,7 @@
                         <h4 class="modal-title">Import Statements</h4>
                     </div>
                     <div class="modal-body">
-                        <form action="/statements/import" enctype="multipart/form-data" method="post" class="statement-dropzone" id="statementImportDrop">
+                        <form action="/import/" enctype="multipart/form-data" method="post" class="statement-dropzone" id="statementImportDrop">
                             <div class="fallback">
                                 <input name="file" type="file" />
                                 <input type="submit" class="btn btn-primary">
