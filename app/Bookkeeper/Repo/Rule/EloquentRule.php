@@ -26,4 +26,9 @@ class EloquentRule implements RuleInterface {
     {
         return $this->rule->all();
     }
+
+    public function allAsArray()
+    {
+        return $this->rule->all()->toArray();
+    }
 }
