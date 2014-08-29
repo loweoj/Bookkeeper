@@ -14,7 +14,7 @@ class AddAccountIdToRecordsTable extends Migration {
 	{
 		Schema::table('records', function(Blueprint $table)
 		{
-            $table->integer('account_id')->unsigned()->after('stream_id');
+            $table->integer('account_id')->nullable()->unsigned()->after('stream_id');
             $table->foreign('account_id')->references('id')->on('bank_accounts');
         });
 	}
