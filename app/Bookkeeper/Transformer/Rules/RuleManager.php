@@ -33,10 +33,14 @@ class RuleManager {
      * @return array|Model
      * @throws \Exception
      */
-    public function run(Model $transaction)
+    public function run($transaction)
     {
         foreach( $this->rules as $rule )
         {
+            if( gettype($rule) !== 'array' && $rule instanceof Model) {
+                $rule = $rule->toArray();
+            }
+
             // could cause issues running a rule on an array in future rules...?
             // $transaction is an array when it returns from runResults
             if ( $this->conditionManager->runConditions($transaction, $rule) )

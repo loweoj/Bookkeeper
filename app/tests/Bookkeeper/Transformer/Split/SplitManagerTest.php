@@ -46,21 +46,20 @@ class SplitManagerTest extends \TestCase
 
     public function test_split_transaction_returns_array()
     {
-        $transaction = new stdClass;
+        $transaction = array();
         $splitJson = [new stdClass];
         $this->assertInternalType('array', $this->splitManager->splitTransaction($transaction, $splitJson));
     }
 
     public function test_returns_new_transaction_for_each_split()
     {
-        $transaction = M::mock();
-        $transaction->payee = 'Some data for this transaction';
-        $transaction->payee = 'Some Payee that Matches a rule and needs splitting';
-        $transaction->description = 'OLD DESCRIPTION';
-        $transaction->amount = '50.00';
-        $transaction->category = 0;
-        $transaction->stream = 0;
-        $transaction->date = '2014-05-05 15:16:30';
+        $transaction = array();
+        $transaction['payee'] = 'Some Payee that Matches a rule and needs splitting';
+        $transaction['description'] = 'OLD DESCRIPTION';
+        $transaction['amount'] = '50.00';
+        $transaction['category'] = 0;
+        $transaction['stream'] = 0;
+        $transaction['date'] = '2014-05-05 15:16:30';
 
         $splitJson = json_decode($this->splitJsonData);
 
@@ -70,13 +69,13 @@ class SplitManagerTest extends \TestCase
 
     public function test_clones_transactions_and_modifies_with_split_data()
     {
-        $transaction = new stdClass;
-        $transaction->payee = 'Some Payee that Matches a rule and needs splitting';
-        $transaction->description = 'OLD DESCRIPTION';
-        $transaction->amount = '50.00';
-        $transaction->category = 0;
-        $transaction->stream = 0;
-        $transaction->date = '2014-05-05 15:16:30';
+        $transaction = array();
+        $transaction['payee'] = 'Some Payee that Matches a rule and needs splitting';
+        $transaction['description'] = 'OLD DESCRIPTION';
+        $transaction['amount'] = '50.00';
+        $transaction['category'] = 0;
+        $transaction['stream'] = 0;
+        $transaction['date'] = '2014-05-05 15:16:30';
 
         $splitJson = json_decode($this->splitJsonData);
 
@@ -86,8 +85,8 @@ class SplitManagerTest extends \TestCase
         foreach ($transactions as $i => $t) {
             // Loop through the expected changed fields from json
             foreach ($splitJson[$i] as $key => $val) {
-                if (property_exists($t, $key)) {
-                    $this->assertEquals($val, $t->{$key});
+                if (array_key_exists($key, $t)) {
+                    $this->assertEquals($val, $t[$key]);
                 }
             }
         }
@@ -95,13 +94,13 @@ class SplitManagerTest extends \TestCase
 
     public function test_applies_percentages_to_amount()
     {
-        $transaction = new stdClass;
-        $transaction->payee = 'Some Payee that Matches a rule and needs splitting';
-        $transaction->description = 'OLD DESCRIPTION';
-        $transaction->amount = '50.00';
-        $transaction->category = 0;
-        $transaction->stream = 0;
-        $transaction->date = '2014-05-05 15:16:30';
+        $transaction = [];
+        $transaction['payee'] = 'Some Payee that Matches a rule and needs splitting';
+        $transaction['description'] = 'OLD DESCRIPTION';
+        $transaction['amount'] = '50.00';
+        $transaction['category'] = 0;
+        $transaction['stream'] = 0;
+        $transaction['date'] = '2014-05-05 15:16:30';
         $splitJson = json_decode($this->splitJsonData);
 
         // Mock the percentage calculator to return 100 each time
@@ -116,7 +115,7 @@ class SplitManagerTest extends \TestCase
 
         // Loop through the transactions and test each transaction amount is 100!
         foreach ($transactions as $i => $t) {
-            $this->assertEquals(100, $t->amount);
+            $this->assertEquals(100, $t['amount']);
         }
     }
 }

@@ -19,25 +19,25 @@ class RuleResultManager {
     }
 
     /**
-     * @param \Transaction $transaction
-     * @param \Rule $rule
+     * @param array $transaction
+     * @param array $rule
      * @return array
      */
-    public function runResults($transaction, $rule)
+    public function runResults(array $transaction, array $rule)
     {
         // replace field matches
-        foreach( $rule->toArray() as $ruleKey => $ruleField) {
+        foreach( $rule as $ruleKey => $ruleField) {
             if( starts_with($ruleKey, 'to_') && $ruleField != '')
             {
                 $field = str_replace('to_', '', $ruleKey);
-                $transaction->{$field} = $ruleField;
+                $transaction[$field] = $ruleField;
             }
         }
 
         // create split transaction
-        if($rule->splitJson != '')
+        if($rule['splitJson'] != '')
         {
-            return $this->splitManager->splitTransaction($transaction, $rule->splitJson);
+            return $this->splitManager->splitTransaction($transaction, $rule['splitJson']);
         }
 
         return $transaction;

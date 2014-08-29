@@ -19,14 +19,14 @@ class RuleConditionManager {
     }
 
     /**
-     * @param Model $transaction
-     * @param       $dbRule
+     * @param array $transaction
+     * @param array $dbRule
      * @return mixed
      */
-    public function runConditions($transaction, $dbRule)
+    public function runConditions(array $transaction, array $dbRule)
     {
         // The method we want to call (any/all?)
-        $conditionMethod = $dbRule->conditionType . "Conditions";
+        $conditionMethod = $dbRule['conditionType'] . "Conditions";
 
         // Transform each condition into an array of false/true values
         $conditionResultsArray = $this->getConditionResults($transaction, $dbRule);
@@ -36,15 +36,16 @@ class RuleConditionManager {
     }
 
     /**
-     * @param Model $transaction
-     * @param       $dbRule
+     * @param array $transaction
+     * @param array $dbRule
      * @return array
      */
-    protected function getConditionResults($transaction, $dbRule)
+    protected function getConditionResults(array $transaction, array $dbRule)
     {
         $conditionResultsArray = [];
-        foreach ($dbRule->conditions as $dbCondition) {
+        foreach ($dbRule['conditions'] as $dbCondition) {
 
+            // NB. dbCondition is a json_decoded stdClass
             if( gettype($dbCondition) !== 'object' ) {
                 throw new \InvalidArgumentException('Condition should be of type object, ' . gettype($dbCondition) . ' given');
             }
@@ -53,7 +54,7 @@ class RuleConditionManager {
             $condition = $this->conditionFactory->make($dbCondition->match);
 
             // Test the condition
-            $conditionResultsArray[] = $condition->test($transaction->{$dbCondition->field}, $dbCondition->value);
+            $conditionResultsArray[] = $condition->test($transaction[$dbCondition->field], $dbCondition->value);
         }
         return $conditionResultsArray;
     }

@@ -32,25 +32,27 @@ class RuleConditionManagerTest extends \TestCase {
             ->andReturn($mockCondition);
 
         // Mock the dbRule object with two conditions
-        $dbRule= M::mock();
+        $dbRule = [];
 
         // encode and decode to produce a stdClass
-        $dbRule->conditions = json_decode( json_encode([
+        $dbRule['conditions'] = json_decode( json_encode(
             [
-                'field' => 'payee',
-                'match' => 'contains',
-                'value' => 'anything'
-            ],
-            [
-                'field' => 'payee',
-                'match' => 'contains',
-                'value' => 'anything'
+                [
+                    'field' => 'payee',
+                    'match' => 'contains',
+                    'value' => 'anything'
+                ],
+                [
+                    'field' => 'payee',
+                    'match' => 'contains',
+                    'value' => 'anything'
+                ]
             ]
-        ]));
+        ));
 
         // Mock the transaction object with a payee field
-        $transaction = M::mock();
-        $transaction->payee = 'something';
+        $transaction = array();
+        $transaction['payee'] = 'something';
 
         $method = new \ReflectionMethod($this->fullClassName, 'getConditionResults');
         $method->setAccessible(true);

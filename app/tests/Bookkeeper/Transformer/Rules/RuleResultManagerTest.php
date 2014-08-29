@@ -41,7 +41,7 @@ class RuleResultManagerTest extends \TestCase
     public function test_run_results_converts_payee_field()
     {
         // Mock a rule with just the relevant info (to_xxx)
-        $rule = $this->getEloquentArrayMock([
+        $rule = [
             'title'          => 'Match O2',
             'conditionType'  => 'any',
             'to_payee'       => 'O2 Mobile - CHANGED BY TEST RULE',
@@ -49,31 +49,31 @@ class RuleResultManagerTest extends \TestCase
             'to_stream'      => '',
             'to_description' => '',
             'splitJson'      => '',
-        ]);
+        ];
 
-        $transactionMock = M::mock();
-        $transactionMock->payee = 'OLD PAYEE';
-        $transactionMock->description = '';
-        $transactionMock->amount = '50.00';
-        $transactionMock->date = '2014-05-05 15:16:30';
+        $transaction = [];
+        $transaction['payee'] = 'OLD PAYEE';
+        $transaction['description'] = '';
+        $transaction['amount'] = '50.00';
+        $transaction['date'] = '2014-05-05 15:16:30';
 
         $ResultManager = new RuleResultManager($this->mockSplitManager);
-        $newTransaction = $ResultManager->runResults($transactionMock, $rule);
+        $newTransaction = $ResultManager->runResults($transaction, $rule);
 
-        $this->assertEquals('O2 Mobile - CHANGED BY TEST RULE', $newTransaction->payee);
+        $this->assertEquals('O2 Mobile - CHANGED BY TEST RULE', $newTransaction['payee']);
     }
 
     public function test_run_results_converts_multiple_fields()
     {
-        $transactionMock = M::mock();
-        $transactionMock->payee = 'OLD PAYEE';
-        $transactionMock->description = 'OLD DESCRIPTION';
-        $transactionMock->amount = '50.00';
-        $transactionMock->category = 0;
-        $transactionMock->date = '2014-05-05 15:16:30';
+        $transaction = array();
+        $transaction['payee'] = 'OLD PAYEE';
+        $transaction['description'] = 'OLD DESCRIPTION';
+        $transaction['amount'] = '50.00';
+        $transaction['category'] = 0;
+        $transaction['date'] = '2014-05-05 15:16:30';
 
         // Mock the dbRule object with two conditions
-        $rule = $this->getEloquentArrayMock([
+        $rule = [
             'title'          => 'Match O2',
             'conditionType'  => 'any',
             'to_payee'       => 'O2 Mobile - NEW PAYEE',
@@ -81,14 +81,14 @@ class RuleResultManagerTest extends \TestCase
             'to_stream'      => '',
             'to_description' => 'NEW DESCRIPTION',
             'splitJson'      => '',
-        ]);
+        ];
 
         $ResultManager = new RuleResultManager($this->mockSplitManager);
-        $newTransaction = $ResultManager->runResults($transactionMock, $rule);
+        $newTransaction = $ResultManager->runResults($transaction, $rule);
 
-        $this->assertEquals($newTransaction->payee, 'O2 Mobile - NEW PAYEE');
-        $this->assertEquals($newTransaction->description, 'NEW DESCRIPTION');
-        $this->assertEquals($newTransaction->category, 4);
+        $this->assertEquals($newTransaction['payee'], 'O2 Mobile - NEW PAYEE');
+        $this->assertEquals($newTransaction['description'], 'NEW DESCRIPTION');
+        $this->assertEquals($newTransaction['category'], 4);
     }
 
     public function test_calls_split_manager_if_split_json()
@@ -103,12 +103,12 @@ class RuleResultManagerTest extends \TestCase
                 ]
             );
 
-        $transactionMock = M::mock();
+        $transactionMock = array();
 
         // Mock the rule with some simulated json_decoded data
-        $rule = $this->getEloquentArrayMock([
+        $rule = [
             'splitJson'      => [new stdClass()],
-        ]);
+        ];
 
         $ResultManager = new RuleResultManager($mock);
         $ResultManager->runResults($transactionMock, $rule);
