@@ -83,7 +83,7 @@
 
                     <td colspan="3" class="align-right">
                         <span class="js-editable-value">-</span>
-                        {{ Form::select('category', $categories, 1, ['class' => 'form-control', 'data-editable-input']) }}
+                        {{ Form::select('category', $transaction->categoriesArray, 1, ['class' => 'form-control', 'data-editable-input']) }}
                     </td>
 
                     <td colspan="2" class="align-right">

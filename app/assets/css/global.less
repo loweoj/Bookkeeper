@@ -31,6 +31,18 @@ body {
   text-align: right;
 }
 
+.cf {
+    .clearfix();
+}
+
+.mb {
+    margin-bottom: @line-height-computed;
+}
+
+.col-container {
+    float: none;
+}
+
 /*==========  Base Overrides  ==========*/
 @import "generic/tables";
 @import "generic/forms";
@@ -82,9 +94,18 @@ body {
     float: right;
 }
 
-
 .util-bar {
     margin: 15px 0 25px 0;
+}
+
+.footer {
+    clear: both;
+    border-top: 1px solid #ccc;
+    margin-top: @line-height-computed;
+    padding: @line-height-computed 0;
+    p {
+        margin-bottom: 0;
+    }
 }
 
 /*==========  Sign In  ==========*/

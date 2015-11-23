@@ -26,8 +26,10 @@ class PercentageCalculator implements CalculatorInterface
      */
     protected $seenPercentageAmounts = [];
 
+
     /**
-     *
+     * Calculates the $percentage of $total
+     * e.g. 15% of 150 (=22.5)
      *
      * @param $percentage
      * @param $total
@@ -55,6 +57,7 @@ class PercentageCalculator implements CalculatorInterface
 
         return $percentage;
     }
+
 
     /**
      * Do the percentage calculation rounded down

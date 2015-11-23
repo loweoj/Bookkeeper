@@ -2,10 +2,10 @@
 
 class ImportStatementCommand {
 
-    private $importFile;
+    public $accountData;
 
-    public function __construct($importFile)
+    public function __construct($data)
     {
-        $this->importFile = $importFile;
+        $this->accountData = $data;
     }
 }

@@ -2,7 +2,9 @@
 
 use Bookkeeper\Repo\Category\CategoryInterface;
 use Bookkeeper\Repo\Stream\StreamInterface;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
+use Record;
 
 class EloquentRecord implements RecordInterface
 {
@@ -44,6 +46,40 @@ class EloquentRecord implements RecordInterface
         $this->resetQuery();
     }
 
+    /**
+     * Creates draft records for a given bank account
+     * @param $draftRecords
+     * @param $bankAccountId
+     * @return EloquentCollection
+     */
+    public function createDraftRecordsForAccount($draftRecords, $bankAccountId)
+    {
+        $collection = new EloquentCollection();
+
+        // Strip transaction model data
+        foreach($draftRecords as $recordAtts)
+        {
+            $recordAtts['account_id'] = $bankAccountId;
+            $recordAtts['status'] = 'draft';
+
+            // Create a default stream field in streams and find the stream?
+            if( ! isset($recordAtts['stream_id']) ){
+                $recordAtts['stream_id'] = 1;
+            }
+
+            $record = new Record($recordAtts);
+            if( $record->save() ) {
+                $collection->add($record);
+            } else {
+                // TODO: Better error handling for validation errors?
+                return $record->getErrors();
+            }
+        }
+
+        return $collection;
+    }
+
+
     public function find($id)
     {
         return $this->record->find($id);
@@ -51,7 +87,10 @@ class EloquentRecord implements RecordInterface
 
     public function getDrafts()
     {
-        $this->withStatus = 'draft';
+        $this->query->whereStatus('draft');
+
+        // Order by created_at!!
+        // $this->query->orderBy('created_at');
         return $this->all();
     }
 
@@ -133,9 +172,12 @@ class EloquentRecord implements RecordInterface
         if( isset($this->withStatus)) {
             $this->query->whereStatus($this->withStatus);
         } else {
-            $this->query->whereStatus('approved');
+            // $this->query->whereStatus('approved');
         }
 
+//        if(empty($this->query->orders) ) {
+//            $this->query->orderBy('date', 'desc')
+//        }
         $results = $this->query
             ->with('category', 'stream', 'attachment')
             ->orderBy('date', 'desc')

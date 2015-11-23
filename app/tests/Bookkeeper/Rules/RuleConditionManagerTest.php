@@ -1,4 +1,4 @@
-<?php namespace Bookkeeper\Transformer\Rules;
+<?php namespace Bookkeeper\Rules;
 
 use \Mockery as M;
 
@@ -10,9 +10,9 @@ class RuleConditionManagerTest extends \TestCase {
     public function setUp()
     {
         parent::setUp();
-        $mockFactory = M::mock('Bookkeeper\Transformer\Conditions\ConditionFactory');
+        $mockFactory = M::mock('Bookkeeper\Rules\Conditions\ConditionFactory');
         $this->conditionManager = new RuleConditionManager($mockFactory);
-        $this->fullClassName = 'Bookkeeper\Transformer\Rules\RuleConditionManager';
+        $this->fullClassName = 'Bookkeeper\Rules\RuleConditionManager';
     }
 
     public function tearDown()
@@ -26,7 +26,7 @@ class RuleConditionManagerTest extends \TestCase {
         $mockCondition = M::mock(['test' => true]);
 
         // Mock the factory class
-        $mockFactory = M::mock('Bookkeeper\Transformer\Conditions\ConditionFactory');
+        $mockFactory = M::mock('Bookkeeper\Rules\Conditions\ConditionFactory');
         $mockFactory->shouldReceive('make')
             ->times(2)
             ->andReturn($mockCondition);

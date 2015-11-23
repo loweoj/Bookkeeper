@@ -1,4 +1,4 @@
-<?php namespace Bookkeeper\Transformer\Rules;
+<?php namespace Bookkeeper\Rules;
 
 use Mockery as M;
 use stdClass;
@@ -13,7 +13,7 @@ class RuleResultManagerTest extends \TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->mockSplitManager = M::mock('Bookkeeper\Transformer\Split\SplitManager');
+        $this->mockSplitManager = M::mock('Bookkeeper\Rules\Split\SplitManager');
         $this->resultManager = new RuleResultManager($this->mockSplitManager);
     }
 

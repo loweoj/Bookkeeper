@@ -34,8 +34,10 @@ class RuleManager {
     public function run($transactions)
     {
         $return = [];
-        foreach ($transactions as $transaction) {
+        foreach ($transactions as $transaction)
+        {
             $result = $this->runSingle($transaction);
+
             // If the array has been split (is multidimensional)
             // then we merge it onto the current return array.
             if (isset($result[0]) && is_array($result[0])) {
@@ -58,7 +60,8 @@ class RuleManager {
      */
     public function runSingle($transaction)
     {
-        foreach ($this->rules as $rule) {
+        foreach ($this->rules as $rule)
+        {
             // Check we are handling an array rule here!
             if (gettype($rule) !== 'array' && $rule instanceof Model) {
                 $rule = $rule->toArray();
@@ -66,6 +69,7 @@ class RuleManager {
 
             if ($this->conditionManager->runConditions($transaction, $rule)) {
                 $transaction = $this->resultManager->runResults($transaction, $rule);
+
                 // Stop running rules if we have a split
                 if (isset($transaction[0]) && is_array($transaction[0])) {
                     break;

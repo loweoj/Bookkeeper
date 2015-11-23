@@ -30,7 +30,12 @@
         </div>
     </header>
 
-    @yield('content')
+    <div class="container">
+        @yield('content')
+        <div class="footer">
+            <p>&copy; {{ date('Y') }} Bookkeeper</p>
+        </div>
+    </div>
 
     {{ HTML::script('/assets/js/global.js') }}
 

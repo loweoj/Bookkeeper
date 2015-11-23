@@ -9,6 +9,7 @@ class Record extends BaseModel
         'amount',
         'description',
         'type',
+        'status',
         'transaction_id',
         'category_id',
         'stream_id'
@@ -21,11 +22,11 @@ class Record extends BaseModel
     protected static $create_rules = [
         'date'        => 'required',
         'payee'       => 'required',
-        'description' => 'required',
+        // 'description' => 'required',
         'amount'      => 'required',
         'type'        => 'required',
-        'category_id' => 'required',
-        'stream_id'   => 'required'
+        // 'category_id' => 'required',
+        // 'stream_id'   => 'required'
     ];
 
     public function category()
@@ -64,8 +65,8 @@ class Record extends BaseModel
     /**
      * @param $value
      */
-    public function setDateAttribute($value)
-    {
-        $this->attributes['date'] = Carbon\Carbon::createFromFormat('d/m/Y', $value);
-    }
+//    public function setDateAttribute($value)
+//    {
+//        $this->attributes['date'] = \Carbon\Carbon::createFromFormat('d/m/Y', $value);
+//    }
 }

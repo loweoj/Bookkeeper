@@ -21,8 +21,8 @@ class CreateRecordsTable extends Migration {
             $table->enum('type', ['income','expense']);
 			$table->decimal('amount');
             $table->integer('transaction_id')->nullable()->unsigned();
-            $table->integer('category_id')->unsigned();
-            $table->integer('stream_id')->unsigned();
+            $table->integer('category_id')->nullable()->unsigned();
+            $table->integer('stream_id')->nullable()->unsigned();
             $table->enum('status', ['approved','draft']);
             $table->softDeletes();
             $table->timestamps();

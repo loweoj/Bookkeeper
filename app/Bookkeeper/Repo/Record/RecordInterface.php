@@ -18,4 +18,5 @@ interface RecordInterface {
 
     public function byPayee($payee);
 
-} 
+    public function createDraftRecordsForAccount($draftRecords, $id);
+}

@@ -30,6 +30,7 @@ Route::get('transactions', ['uses' => 'TransactionsController@index', 'as' => 't
  * Statement Import Handler
  */
 Route::post('import', ['uses' => 'ImportController@import', 'as' => 'import']);
+Route::post('import/csv', ['uses' => 'ImportController@csvImport', 'as' => 'import.csv']);
 
 
 /**

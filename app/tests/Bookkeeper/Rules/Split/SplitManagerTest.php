@@ -1,4 +1,4 @@
-<?php namespace Bookkeeper\Transformer\Split;
+<?php namespace Bookkeeper\Rules\Split;
 
 use Mockery as M;
 use stdClass;
@@ -30,7 +30,7 @@ class SplitManagerTest extends \TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->calculatorMockName = 'Bookkeeper\Transformer\Split\Calculator\CalculatorInterface';
+        $this->calculatorMockName = 'Bookkeeper\Rules\Split\Calculator\CalculatorInterface';
 
         $calculatorMock = M::mock($this->calculatorMockName);
         $calculatorMock->shouldReceive('newCalculation')->zeroOrMoreTimes();

@@ -31,15 +31,15 @@ class ImportTranslator {
     }
 
     /**
-     * Return an array of Bank Accounts with transactions
+     * Return an array of bank accounts with transactions
      *
-     * @param        $data
-     * @param string $map CSV Data Map array
-     * @return array
+     * @param      $data
+     * @param null $map
+     * @return mixed
+     * @throws \Exception
      */
-    public function makeAccountsArray($data, $map = 'null')
+    public function makeAccountsArray($data, $map = null)
     {
-
         $this->transformer = $this->fetchTransformer();
 
         $transformedData = $this->transformer->transform($data, $map);
@@ -82,6 +82,12 @@ class ImportTranslator {
         return $this->extension;
     }
 
+    /**
+     * Get the parser for this file type
+     *
+     * @param $extension
+     * @return mixed
+     */
     protected function fetchParser($extension)
     {
         $this->extension = $extension;
@@ -96,6 +102,7 @@ class ImportTranslator {
     }
 
     /**
+     * Get the transformer for this file type
      * @return mixed
      */
     protected function fetchTransformer()

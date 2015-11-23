@@ -3,6 +3,7 @@
 use Bookkeeper\Repo\Transaction\TransactionInterface;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Validator;
 
 class EloquentBankAccount implements BankAccountInterface {
 
@@ -21,16 +22,22 @@ class EloquentBankAccount implements BankAccountInterface {
         $this->transaction = $transaction;
     }
 
+    /**
+     * Find a bank account by account number, or create one!
+     *
+     * @param array $account
+     * @return bool|static
+     */
     public function findOrCreate(array $account)
     {
         if ( ! isset($account['account-number'])) {
             return false;
         }
 
-        // Find ?
+        // Find
         $acct = $this->findByAccountNumber($account['account-number']);
 
-        // Create!
+        // or create!
         if ( ! $acct) {
 
             $atts = [
@@ -53,6 +60,12 @@ class EloquentBankAccount implements BankAccountInterface {
         return $acct;
     }
 
+    /**
+     * Find or create BankAccount, and add transactions
+     *
+     * @param $account
+     * @return \BankAccount|EloquentBankAccount|bool|static
+     */
     public function findOrCreateWithTransactions($account)
     {
         $acct = $this->findOrCreate($account);
@@ -70,27 +83,28 @@ class EloquentBankAccount implements BankAccountInterface {
         return $acct;
     }
 
+    /**
+     * Create transactions for a given bank account
+     *
+     * @param \BankAccount $acct
+     * @param              $transactions
+     * @return \BankAccount|bool
+     */
     public function createTransactions(\BankAccount $acct, $transactions)
     {
-        // Insert Transactions
         if (empty($transactions)) {
             return false;
         }
 
-        $acctId = $acct->id;
-
-        foreach ($transactions as &$transaction) {
-            $transaction['account_id'] = $acctId;
-        }
-
-        $result = \DB::table('transactions')->insert($transactions);
-
-        if( $result ) {
-            return $acct;
-        }
-        return false;
+        $this->transaction->createForBankId($transactions, $acct->id);
+        return $acct;
     }
 
+    /**
+     * Find a bank account by account number
+     * @param $account
+     * @return mixed
+     */
     public function findByAccountNumber($account)
     {
         return $this->bankAccount->where('account_number', '=', $account)->first();

@@ -14,21 +14,21 @@ class BaseModel extends \Eloquent {
      *
      * @var Array
      */
-    protected static $create_rules = array();
+    protected static $create_rules = [];
 
     /**
      * Validation rules for modeul updating
      *
      * @var Array
      */
-    protected static $update_rules = array();
+    protected static $update_rules = [];
 
     /**
      * Custom messages
      *
      * @var Array
      */
-    protected static $messages = array();
+    protected static $messages = [];
 
     /**
      * Validator instance
@@ -37,7 +37,7 @@ class BaseModel extends \Eloquent {
      */
     protected $validator;
 
-    public function __construct(array $attributes = array(), Validator $validator = null)
+    public function __construct(array $attributes = [], Validator $validator = null)
     {
         parent::__construct($attributes);
 
@@ -102,5 +102,4 @@ class BaseModel extends \Eloquent {
     {
         return ! empty($this->errors);
     }
-
 }

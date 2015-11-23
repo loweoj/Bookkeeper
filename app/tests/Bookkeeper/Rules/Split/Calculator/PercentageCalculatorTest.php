@@ -1,6 +1,6 @@
-<?php  namespace tests\Bookkeeper\Transformer\Calculator;
+<?php  namespace Bookkeeper\Rules\Split\Calculator;
 
-use Bookkeeper\Transformer\Split\Calculator\PercentageCalculator;
+use Bookkeeper\Rules\Split\Calculator\PercentageCalculator;
 use Mockery as M;
 
 class PercentageCalculatorTest extends \TestCase

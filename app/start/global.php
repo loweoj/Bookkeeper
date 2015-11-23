@@ -88,3 +88,12 @@ require app_path().'/filters.php';
 */
 
 require app_path().'/macros.php';
+
+/*
+|--------------------------------------------------------------------------
+| Require The Extensions File
+|--------------------------------------------------------------------------
+|
+*/
+
+require app_path().'/extensions.php';
